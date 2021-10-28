@@ -1,0 +1,46 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Diamant et~al.(2021)Diamant, Reinertsen, Song, Aguirre, Stultz, and
+  Batra]{diamant2021patient}
+Nathaniel Diamant, Erik Reinertsen, Steven Song, Aaron Aguirre, Collin Stultz,
+  and Puneet Batra.
+\newblock Patient contrastive learning: a performant, expressive, and practical
+  approach to ecg modeling.
+\newblock \emph{arXiv preprint arXiv:2104.04569}, 2021.
+
+\bibitem[Gopal et~al.(2021)Gopal, Han, Raghupathi, Ng, Tison, and
+  Rajpurkar]{gopal20213kg}
+Bryan Gopal, Ryan~W Han, Gautham Raghupathi, Andrew~Y Ng, Geoffrey~H Tison, and
+  Pranav Rajpurkar.
+\newblock 3kg: Contrastive learning of 12-lead electrocardiograms using
+  physiologically-inspired augmentations.
+\newblock \emph{arXiv preprint arXiv:2106.04452}, 2021.
+
+\bibitem[Kiyasseh et~al.(2021)Kiyasseh, Zhu, and Clifton]{kiyasseh2021clocs}
+Dani Kiyasseh, Tingting Zhu, and David~A Clifton.
+\newblock Clocs: Contrastive learning of cardiac signals across space, time,
+  and patients.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  5606--5615. PMLR, 2021.
+
+\bibitem[Park et~al.(2019)Park, Chan, Zhang, Chiu, Zoph, Cubuk, and
+  Le]{park2019specaugment}
+Daniel~S Park, William Chan, Yu~Zhang, Chung-Cheng Chiu, Barret Zoph, Ekin~D
+  Cubuk, and Quoc~V Le.
+\newblock Specaugment: A simple data augmentation method for automatic speech
+  recognition.
+\newblock \emph{arXiv preprint arXiv:1904.08779}, 2019.
+
+\bibitem[Tian et~al.(2020)Tian, Sun, Poole, Krishnan, Schmid, and
+  Isola]{tian2020makes}
+Yonglong Tian, Chen Sun, Ben Poole, Dilip Krishnan, Cordelia Schmid, and
+  Phillip Isola.
+\newblock What makes for good views for contrastive learning?
+\newblock \emph{arXiv preprint arXiv:2005.10243}, 2020.
+
+\end{thebibliography}

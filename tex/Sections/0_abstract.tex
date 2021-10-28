@@ -1,0 +1,15 @@
+\begin{abstract}
+Abnormal cardiac signals in an electrocardiogram (ECG) are used to screen the heart condition.
+Physicians oftentimes order diagnostic tests which include invasive procedures.
+For instance, the function of the left heart can be precisely measured by the pulmonary capillary wedge pressure (PCWP) which is invaisve.
+To reduce the risk of such invasive procedures, we can build a model to infer PCWP using non-invasive ECG screening.
+Moreover, we can leverage the vast amount of unlabeled ECG dataset to learn a useful representation. %why contrastive learning?
+Yet, an important question remains; what are the good views (\cite{tian2020makes}) of ECGs for contrastive learning?
+Previous works have tried to include ECGs from the same patients (\cite{diamant2021patient}), different augmentations from the same ECG (\cite{gopal20213kg}), and different projections of the same ECG (\cite{kiyasseh2021clocs}) to define proper `views' for contrastive learning. However, none of them has tried to explore the various views from different ECGs and compare those. In this project, we define different views according to \textit{age, sex, racial groups} with and without augmentation (scaling, adding Gaussian noise, shifting, augmentation on spectrogram domain (\cite{park2019specaugment}). Then compare the learned representation over the downstream task - classification and regression of PCWP.
+%need to write why this is important
+\end{abstract}
+
+%ECG of a patient with left heart failure might have a sign of left heart hypertrophy in his/her ECG signal.
+% Why contrastive learning?
+% How's view defined?
+

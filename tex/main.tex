@@ -1,0 +1,135 @@
+%\documentclass[wcp,gray]{jmlr} % test grayscale version
+ %\documentclass[wcp]{jmlr}% former name JMLR W\&CP
+\documentclass[pmlr]{jmlr}% new name PMLR (Proceedings of Machine Learning)
+
+ % The following packages will be automatically loaded:
+ % amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+ %\usepackage{rotating}% for sideways figures and tables
+\usepackage{longtable}% for long tables
+
+ % The booktabs package is used by this sample document
+ % (it provides \toprule, \midrule and \bottomrule).
+ % Remove the next line if you don't require it.
+\usepackage{booktabs}
+ % The siunitx package is used by this sample document
+ % to align numbers in a column by their decimal point.
+ % Remove the next line if you don't require it.
+\usepackage[load-configurations=version-1]{siunitx} % newer version
+ %\usepackage{siunitx}
+
+\makeatletter
+\def\set@curr@file#1{\def\@curr@file{#1}} %temp workaround for 2019 latex release
+\makeatother
+
+ % The following command is just for this sample document:
+\newcommand{\cs}[1]{\texttt{\char`\\#1}}
+
+ % Define an unnumbered theorem just for this sample document:
+\theorembodyfont{\upshape}
+\theoremheaderfont{\scshape}
+\theorempostheader{:}
+\theoremsep{\newline}
+\newtheorem*{note}{Note}
+
+ % change the arguments, as appropriate, in the following:
+\jmlrvolume{149}
+\jmlryear{2021}
+\jmlrworkshop{Machine Learning for Healthcare}
+
+% Short headings should be running head and authors last names
+% \ShortHeadings{A Really Awesome MLHC Article}{Lastname, PhD and Lastname, MD}
+% \firstpageno{1}
+
+\title[Short Title]{Contrastive Learning of Electrocardiogram signals for the inference of cardiac pressure}
+
+\author{\Name{Hyewon Jeong}
+       \Email{hyewonj@mit.edu}\\
+       \addr Computer Science and Artificial Intelligence Laboratory\\
+       Massachusetts Institute of Technology\\
+       Cambridge, MA, United States of America
+       \AND
+       \Name{Marzyeh Ghassemi}
+       \Email{mghassem@mit.edu}\\
+       \addr Computer Science and Artificial Intelligence Laboratory\\
+       Massachusetts Institute of Technology\\
+       Cambridge, MA, United States of America
+       \AND
+       \Name{Collin Stultz}
+       \Email{name@email.edu}\\
+              \addr Computer Science and Artificial Intelligence Laboratory\\
+       Massachusetts Institute of Technology\\
+       dCambridge, MA, United States of America
+       }
+
+\editor{Editor's name}
+
+\begin{document}
+
+\maketitle
+
+\input{Sections/0_abstract}
+
+
+%\input{Sections/1_Introduction}
+%\input{Sections/2_Approach}
+%\input{Sections/3_Methods}
+%
+%\section{Cohort}
+%
+%\emph{This section is optional, more theoretical work may not need
+%  this section.  However, if you are using health data, then you need
+%  to describe it carefully so that the clinicians can validate the
+%  soundness of your choices.}
+%
+%Describe the cohort.  Give us the details of any inclusion/exclusion
+%criteria, what data were extracted, how features were processed,
+%etc.  Recommended headings include:
+%
+%\subsection{Cohort Selection}
+%with choice of criteria and basic numbers, as well as any relevant
+%information about the study design (such how cases and controls were
+%identified, if appropriate),
+%
+%\subsection{Data Extraction}
+%with what raw information you extracted or collected, including any
+%assumptions and imputation that may have been used, and
+%
+%\subsection{Feature Choices}
+%with how you might have converted the raw data into features that were
+%used in your algorithm.
+%
+%Cohort descriptions are just as important as methods details and code
+%to replicate a study.  For more clinical application papers, each of
+%the sections above might be several paragraphs because we really want
+%to understand the setting.
+%
+%For the submission, please do \emph{not} include the name of the
+%institutions for any private data sources.  However, in the
+%camera-ready, you may include identifying information about the
+%institution as well as should include any relevant IRB approval
+%statements.
+%
+%\input{Sections/4_Results}
+%
+%\paragraph{Limitations}
+%
+%Explain when your approach may not apply, or things you could not
+%check.  \emph{Discussing limitations is essential.  Both ACs and
+%  reviewers have been coached to be skeptical of any work that does
+%  not consider limitations.}
+
+% ACKNOWLEDGEMENTS ONLY GO IN THE CAMERA-READY, NOT THE SUBMISSION
+% \acks{Many thanks to all collaborators and funders!}
+
+\bibliography{reference}
+
+\appendix
+\section*{Appendix A.}
+
+Some more details about those methods, so we can actually reproduce
+them.  After the blind review period, you could link to a repository
+for the code also.  \emph{MLHC values both rigorous evaluation as well
+  as reproduciblity.}
+
+\end{document}
