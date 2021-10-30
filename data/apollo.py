@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 
@@ -23,7 +24,8 @@ class ECGDataset(Dataset):
         # load ECG
         qid = row['QuantaID']
         doc = row['Date_of_Cath']
-        fname = f'/storage/shared/apollo/same-day/{qid}_{doc}.csv'
+        fname = os.path.join(self.args.dir_csv, f'{qid}_{doc}.csv')
+        # fname = f'/storage/shared/apollo/same-day/{qid}_{doc}.csv'
 
         x = pd.read_csv(fname).values[::2,1:].astype(np.float32)
         
