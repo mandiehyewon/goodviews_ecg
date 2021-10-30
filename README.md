@@ -1,5 +1,12 @@
 # metricssl_ecg
 
+## Environment Setting
+
+```
+python == 3.9.7
+pytorch == 1.10.0
+```
+
 ## Model Training
 
 To run ResNet18 model for the binary classification of PCWP, you can run:
