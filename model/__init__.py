@@ -2,9 +2,14 @@ import importlib
 import torch.nn as nn
 import torchvision.models as models
 
+from model.resnet import resnet18, resnet34
+
 def get_model(args, device=None):
 
     if args.model == 'cnn':
+        model = resnet18()
+
+    elif args.model == 'cnn_prev':
         model = models.resnet18(pretrained=True).to(device)
         model.conv1 = nn.Conv2d(1, 64, (7, 7), (2, 2), (3, 3), bias=False)
         model.avgpool = nn.AdaptiveAvgPool2d(1)
