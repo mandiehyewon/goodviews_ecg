@@ -39,7 +39,7 @@ for epoch in range(1, args.epochs + 1):
         else:
             logits = model(train_x)
 
-        loss = criterion(logits.float(), train_y.float())
+        loss = criterion(logits.float(), train_y.unsqueeze(1).float())
         logger.loss += loss.item()
         
         optimizer.zero_grad()
@@ -62,7 +62,7 @@ for epoch in range(1, args.epochs + 1):
                 val_x, val_y = val_x.to(device), val_y.to(device)
         
                 if args.model == 'cnn':
-                    logits = model(val_x.unsqueeze(1))
+                    logits = model(val_x)
                 else:
                     logits = model(val_x)
                 
