@@ -46,15 +46,15 @@ with torch.no_grad():
     for i, test_batch in tqdm(enumerate(test_loader), total=len(test_loader), bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}"):
         test_x, test_y = test_batch
         test_x, test_y = test_x.to(device), test_y.to(device)
-        logits = model(test_x.unsqueeze(1))
-        
+        logits = model(test_x)
+
         loss = criterion(logits.float(), test_y.unsqueeze(1).float())
         evaluator.add_batch(test_y.cpu(), logits.cpu(), loss, test=True)
-    
+
     if args.train_mode == 'binary_class':
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
-        
+
     elif args.train_mode == 'regression':
         loss = evaluator.performance_metric()
         print ('loss: {}'.format(loss))
