@@ -27,7 +27,7 @@ parser.add_argument("--decay-rate", type=int, default=0.1)
 parser.add_argument("--decay-iter", type=int, default=56000)
 
 # Data Parameters
-# parser.add_argument('--data', type=str, default="whole") #mgh, bgw
+parser.add_argument('--data', type=str, default="whole") #mgh, bgw
 parser.add_argument("--normalize-label", default=False, action="store_true")  # used to normalize labels (pcwp)
 parser.add_argument("--label", type=str, default="pcwp", choices=["pcwp", "age", "gender"])
 parser.add_argument("--pcwp-th", type=int, default=18)
@@ -50,6 +50,7 @@ parser.add_argument("--save-iter", type=int, default=100)
 # Test / Store Parameters
 parser.add_argument("--best", default=True, action="store_true")
 parser.add_argument("--last", default=False, action="store_true")
+parser.add_argument("--plot-prob", default=False, action="store_true")
 args = parser.parse_args()
 
 # Dataset Path settings

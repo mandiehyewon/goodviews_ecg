@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 from tqdm import tqdm
 import numpy as np
@@ -10,7 +11,7 @@ from data import get_data
 from model import get_model
 from utils.loss import get_loss
 from utils.metrics import Evaluator
-from utils.utils import set_devices
+from utils.utils import set_devices, logit2prob, scatterplot
 
 '''
 CUDA_VISIBLE_DEVICES={} python test.py --name {name} --model {cnn} --
@@ -25,9 +26,10 @@ evaluator = Evaluator(args)
 criterion = get_loss(args)
 
 # Check if result exists
-    result_ckpt = os.path.join(args.dir_result, name, 'test_result.pth')
-    if (not args.reset) and os.path.exists(result_ckpt):
-        continue
+result_ckpt = os.path.join(args.dir_result, name, 'test_result.pth')
+if (not args.reset) and os.path.exists(result_ckpt):
+    print('this experiment has tested before.')
+    sys.exit()
 
 # Check if checkpoint exists
 if args.last:
@@ -46,6 +48,9 @@ model.eval()
 print('loaded model')
 
 evaluator.reset()
+if args.plot_prob:
+    prob = []
+    label = []
 
 with torch.no_grad():
     for i, test_batch in tqdm(enumerate(test_loader), total=len(test_loader), bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}"):
@@ -56,6 +61,11 @@ with torch.no_grad():
         loss = criterion(logits.float(), test_y.unsqueeze(1).float())
         evaluator.add_batch(test_y.cpu(), logits.cpu(), loss, test=True)
 
+        if args.plot_prob:
+            prob_np = np.apply_along_axis(logit2prob, 0, np.array(logits.cpu()))
+            prob.append(prob_np.copy())
+            label.append(np.array(test_y.cpu()).copy())
+
     if args.train_mode == 'binary_class':
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
@@ -64,6 +74,10 @@ with torch.no_grad():
         loss = evaluator.performance_metric()
         print ('loss: {}'.format(loss))
 
-result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
+import ipdb; ipdb.set_trace()
 
+if args.plot_prob:
+    scatterplot(args, label, prob)
+
+result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
 torch.save(result_dict, result_ckpt)

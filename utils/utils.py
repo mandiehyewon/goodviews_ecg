@@ -1,6 +1,8 @@
 import os
+import math
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
@@ -16,3 +18,13 @@ def set_devices(args):
 		return torch.device('cpu')
 	else:
 		return torch.device('cuda')
+
+def logit2prob(logit):
+	return np.ones(logit.shape)/(np.ones(logit.shape) + np.exp(logit))
+
+def scatterplot(args, x,y):
+	plt.scatter(x, y)
+	plt.show()
+	plt.save(os.path.join(args.dir_result, args.name))
+
+	return
