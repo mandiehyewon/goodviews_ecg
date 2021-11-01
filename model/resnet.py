@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+'''
+@time: 2019/9/8 20:14
+直接修改torch的resnet
+@ author: javis
+'''
+
 import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
