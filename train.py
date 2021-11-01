@@ -13,6 +13,7 @@ from utils.loss import get_loss
 from utils.metrics import Evaluator
 from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
+from utils.lr_scheduler import LR_Scheduler
 
 seed = set_seeds(args)
 device = set_devices(args)
@@ -24,7 +25,7 @@ model = get_model(args, device=device)
 
 criterion = get_loss(args)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
-
+scheduler = LR_Scheduler(optimizer, args.schedule, args.lr, args.epochs, from_iter=trainer.from_step, warmup_iters=args.warmup_iters, functional=True)
 
 ### TRAINING
 pbar = tqdm(
