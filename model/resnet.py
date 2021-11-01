@@ -3,6 +3,9 @@
 @time: 2019/9/8 20:14
 直接修改torch的resnet
 @ author: javis
+
+Adopted From:
+https://github.com/Amadeuszhao/SE-ECGNet/blob/master/models/resnet.py
 '''
 
 import torch.nn as nn
