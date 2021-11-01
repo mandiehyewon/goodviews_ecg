@@ -24,6 +24,11 @@ model = get_model(args, device=device)
 evaluator = Evaluator(args)
 criterion = get_loss(args)
 
+# Check if result exists
+    result_ckpt = os.path.join(args.dir_result, name, 'test_result.pth')
+    if (not args.reset) and os.path.exists(result_ckpt):
+        continue
+
 # Check if checkpoint exists
 if args.last:
     ckpt_path = os.path.join(args.dir_result, name, 'ckpts/last.pth')
@@ -58,3 +63,7 @@ with torch.no_grad():
     elif args.train_mode == 'regression':
         loss = evaluator.performance_metric()
         print ('loss: {}'.format(loss))
+
+result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
+
+torch.save(result_dict, result_ckpt)

@@ -7,9 +7,8 @@ import torch
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dir-result', type=str, default='runs')
-parser.add_argument('--dataset', type=str, default='pascal')
-parser.add_argument('--stat', type=str, default='iou', choices=['iou', 'acc'])
-parser.add_argument('--semi-ratio', type=float, default=0.05)
+parser.add_argument("--label", type=str, default="pcwp", choices=["pcwp", "age", "gender"])
+parser.add_argument("--pcwp-th", type=int, default=18)
 parser.add_argument('--nrow', type=int, default=5)
 parser.add_argument('--collect', action='store_true', default=False)
 parser.add_argument('--all', action='store_true', default=False)
@@ -49,13 +48,6 @@ for dir_result in dir_results:
             name = '_'.join(parsed[1:-1])
 
         rdict = torch.load(result_ckpt, map_location=device)
-
-        if args.stat == 'iou':
-            df.loc[names[0]:names[-1], name] = rdict['IoU']
-            df.loc['MEAN', name] = rdict['mIoU']
-        else:
-            df.loc[names[0]:names[-1], name] = rdict['cAcc']
-            df.loc['MEAN', name] = rdict['mAcc']
 
 if args.collect:
     df_collect = pd.DataFrame(index=names+['mean'])

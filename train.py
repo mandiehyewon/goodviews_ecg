@@ -77,37 +77,4 @@ for epoch in range(1, args.epochs + 1):
 ckpt = logger.save(model, optimizer, epoch, last=True)
 logger.writer.close()
 
-## Testing
-print("\n Finished training.......... Start Testing..........")
-
-# Load checkpoint
-state = ckpt["model"]
-model = get_model(args).to(device)
-
-model.load_state_dict(state)
-model.eval()
-
-print("loaded checkpoint")
-test_evaluator = Evaluator(args)
-logger.evaluator.reset()
-
-with torch.no_grad():
-    for i, test_batch in tqdm(
-        enumerate(test_loader),
-        total=len(test_loader),
-        bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}",
-    ):
-        test_x, test_y = test_batch
-        test_x, test_y = test_x.to(device), test_y.to(device)
-        logits = model(test_x.unsqueeze(1))
-
-        loss = criterion(logits.float(), test_y.unsqueeze(1).float())
-        logger.evaluator.add_batch(test_y.cpu(), logits.cpu(), loss, test=True)
-
-if args.train_mode == "binary_class":
-    f1, auc, apr, acc = logger.evaluator.performance_metric()
-    print("f1: {}, auc: {}, apr: {}, acc: {}".format(f1, auc, apr, acc))
-
-elif args.train_mode == "regression":
-    loss = logger.evaluator.performance_metric()
-    print("loss: {}".format(loss))
+print("\n Finished training.......... Please Start Testing with test.py")
