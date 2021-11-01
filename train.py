@@ -25,14 +25,10 @@ model = get_model(args, device=device)
 
 criterion = get_loss(args)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
-scheduler = LR_Scheduler(optimizer, args.schedule, args.lr, args.epochs, from_iter=trainer.from_step, warmup_iters=args.warmup_iters, functional=True)
+scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
 
 ### TRAINING
-pbar = tqdm(
-    total=args.epochs,
-    initial=0,
-    bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}",
-)
+pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
 for epoch in range(1, args.epochs + 1):
     loss = 0
     for train_batch in train_loader:
