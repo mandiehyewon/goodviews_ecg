@@ -15,28 +15,20 @@ parser.add_argument("--seed", type=int, default=926)
 
 # Training Parameters
 parser.add_argument("--train-type", type=str, default="supervised")  # ssl
-parser.add_argument(
-    "--train-mode",
-    type=str,
-    default="regression",
-    choices=["regression", "binary_class"],
-)
+parser.add_argument("--train-mode", type=str, default="regression", choices=["regression", "binary_class"])
 parser.add_argument("--epochs", type=int, default=300)
 parser.add_argument("--batch-size", type=int, default=64)
 parser.add_argument("--lr", type=float, default=1e-4)
-parser.add_argument("--lr-scheduler", type=str, default="poly")
+parser.add_argument("--scheduler", type=str, default="poly")
+parser.add_argument('--warmup-iters', type=int, default=0)
 parser.add_argument("--dropout", type=float, default=0.3)
 parser.add_argument("--decay-rate", type=int, default=0.1)
 parser.add_argument("--decay-iter", type=int, default=56000)
 
 # Data Parameters
 # parser.add_argument('--data', type=str, default="whole") #mgh, bgw
-parser.add_argument(
-    "--normalize-label", default=False, action="store_true"
-)  # used to normalize labels (pcwp)
-parser.add_argument(
-    "--label", type=str, default="pcwp", choices=["pcwp", "age", "gender"]
-)
+parser.add_argument("--normalize-label", default=False, action="store_true")  # used to normalize labels (pcwp)
+parser.add_argument("--label", type=str, default="pcwp", choices=["pcwp", "age", "gender"])
 parser.add_argument("--pcwp-th", type=int, default=18)
 
 # Model Parameters
