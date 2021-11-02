@@ -76,13 +76,14 @@ with torch.no_grad():
     if args.train_mode == 'binary_class':
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
+        result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
 
     elif args.train_mode == 'regression':
         loss = evaluator.performance_metric()
         print ('loss: {}'.format(loss))
+        result_dict = {'rmse': loss}
 
 if args.plot_prob:
     scatterplot(args, label, prob)
 
-result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
 torch.save(result_dict, result_ckpt)

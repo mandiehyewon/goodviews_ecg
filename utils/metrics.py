@@ -50,7 +50,7 @@ class Evaluator(object):
     def add_batch(self, y_true, y_pred, loss, test=False):
         if self.args.train_mode == "regression":
             if test == True:
-                loss += self.loss
+                self.loss += loss
             else:
                 self.loss = loss
 
