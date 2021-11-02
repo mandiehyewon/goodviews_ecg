@@ -35,11 +35,7 @@ for epoch in range(1, args.epochs + 1):
         train_x, train_y = train_batch
         train_x, train_y = train_x.to(device), train_y.to(device)
 
-        if args.model == "cnn":
-            logits = model(train_x)
-        else:
-            logits = model(train_x)
-
+        logits = model(train_x)
         loss = criterion(logits.float(), train_y.unsqueeze(1).float())
         logger.loss += loss.item()
 
@@ -62,10 +58,7 @@ for epoch in range(1, args.epochs + 1):
                 val_x, val_y = batch
                 val_x, val_y = val_x.to(device), val_y.to(device)
 
-                if args.model == "cnn":
-                    logits = model(val_x)
-                else:
-                    logits = model(val_x)
+                logits = model(val_x)
 
                 loss = criterion(logits.float(), val_y.unsqueeze(1).float())
                 logger.evaluator.add_batch(val_y.cpu(), logits.cpu(), loss)
