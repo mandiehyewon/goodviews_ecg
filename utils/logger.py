@@ -71,7 +71,7 @@ class Logger:
 
         if self.args.train_mode == 'regression':
             # loss = self.evaluator.performance_metric()
-            if self.best_loss == 0:
+            if self.best_loss == 0.0:
                 self.best_loss = loss
                 self.best_iter == step
             else:

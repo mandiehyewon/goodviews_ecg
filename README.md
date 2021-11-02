@@ -11,6 +11,12 @@ pytorch == 1.10.0
 ```
 ```
 
+## Supervised Metric Learning
+For supervised metric learning, you can run:
+```
+CUDA_VISIBLE_DEVICES=1 python test.py --train-mode binary_class --model cnn --label pcwp --name pcwp_bin_resnet18 (need to be modified)
+```
+
 ## Baseline Model Training
 
 To run ResNet18 model for the binary classification of PCWP, you can run:
@@ -24,19 +30,21 @@ To run ResNet18 model for binary classification of PCWP with threshold 15 (origi
 python train.py --train-mode binary_class --model cnn --label pcwp --name pcwp15_bin_resnet18_epc500_1 --pcwp-th 15 --epoch 500 --seed 1
 ```
 
+To train and test ResNet18 model for the regression of PCWP (without normalization), you can run:
+
+```
+CUDA_VISIBLE_DEVICES=0 python train.py --train-mode regression --model cnn --label pcwp --pcwp-th 15 --epoch 500 --seed 1 --name pcwp15_reg_resnet18_epc500_1
+CUDA_VISIBLE_DEVICES=0 python train.py --train-mode regression --model cnn --label pcwp --epoch 500 --seed 1 --name pcwp18_reg_resnet18_epc500_1
+```
+
 To train and test ResNet18 model for the regression of PCWP (with normalization), you can run:
 
 ```
-CUDA_VISIBLE_DEVICES=1 python train.py --train-mode binary_class --model cnn --label pcwp --normalize-label --name pcwp_bin_resnet18
+CUDA_VISIBLE_DEVICES=1 python train.py --train-mode regression --model cnn --label pcwp --pcwp-th 15 --normalize-label --name pcwp_regress_resnet18
 ```
 
 To test the performance of a model for PCWP binary classification, you can run:
 ```
 CUDA_VISIBLE_DEVICES=1 python test.py --train-mode binary_class --model cnn --label pcwp --name pcwp_bin_resnet18
 CUDA_VISIBLE_DEVICES=2 python test.py --name pcwp15_bin_resnet18_epc500_1 --model cnn --last --train-mode binary_class --label pcwp
-```
-
-For supervised metric learning, you can run:
-```
-CUDA_VISIBLE_DEVICES=1 python test.py --train-mode binary_class --model cnn --label pcwp --name pcwp_bin_resnet18 (need to be modified)
 ```
