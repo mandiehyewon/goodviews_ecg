@@ -52,6 +52,7 @@ class Evaluator(object):
             if test == True:
                 self.loss += loss
                 self.loss /= 2.0
+                print(self.loss)
             else:
                 self.loss = loss
 
