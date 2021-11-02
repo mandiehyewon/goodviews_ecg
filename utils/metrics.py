@@ -86,5 +86,8 @@ class Evaluator(object):
         self.y_true = []
         self.y_pred = []
         self.y_pred_proba = []
-        self.loss = np.inf
+        if self.args.train_mode == 'regression':
+            self.loss = 0.0
+        elif self.args.train_mode == "binary_class":
+            self.loss = np.inf
         self.threshold = 0.5
