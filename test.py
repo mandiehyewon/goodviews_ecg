@@ -72,8 +72,8 @@ with torch.no_grad():
             else:
                 prob = np.concatenate((prob, prob_np))
                 label = np.concatenate((label, np.array(pressure)))
-                
-    if args.train_mode == 'binary_class':
+        print(loss)
+    if args.train_mode == 'binary_class':/args.batch_size
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
         result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
@@ -84,6 +84,7 @@ with torch.no_grad():
         result_dict = {'rmse': loss}
 
 if args.plot_prob:
+    import ipdb; ipdb.set_trace()
     scatterplot(args, label, prob)
 
 torch.save(result_dict, result_ckpt)

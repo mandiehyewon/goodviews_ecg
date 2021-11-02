@@ -51,6 +51,7 @@ class Evaluator(object):
         if self.args.train_mode == "regression":
             if test == True:
                 self.loss += loss
+                self.loss /= 2.0
             else:
                 self.loss = loss
 
