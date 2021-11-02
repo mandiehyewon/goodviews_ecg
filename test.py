@@ -73,7 +73,7 @@ with torch.no_grad():
                 prob = np.concatenate((prob, prob_np))
                 label = np.concatenate((label, np.array(pressure)))
         print(loss)
-    if args.train_mode == 'binary_class':/args.batch_size
+    if args.train_mode == 'binary_class':
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
         result_dict = {'f1': f1, 'auc': auc, 'apr': apr, 'acc': acc}
