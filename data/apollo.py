@@ -47,6 +47,10 @@ class ECGDataset(Dataset):
 #             x = (x-x.mean())/(x.std())
         # if self.augment:
         #     x = self.do_augment(x).astype(np.float32)
-        sample = (x[:2496,:].T, y)
+
+        if self.args.plot_prob:
+            sample = (x[:2496,:].T, y, row['PCWP_mean'])
+        else:
+            sample = (x[:2496,:].T, y)
 
         return sample

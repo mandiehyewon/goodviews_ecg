@@ -24,7 +24,6 @@ def logit2prob(logit):
 
 def scatterplot(args, x,y):
 	plt.scatter(x, y)
-	plt.show()
-	plt.save(os.path.join(args.dir_result, args.name))
+	plt.savefig(os.path.join(args.dir_result, args.name))
 
 	return
