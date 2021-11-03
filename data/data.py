@@ -31,7 +31,7 @@ def get_data(args):
         num_workers=2,
     )
     test_loader = DataLoader(
-        ECGDataset(args, train_df),
+        ECGDataset(args, test_df),
         batch_size=args.batch_size,
         shuffle=False,
         num_workers=2,

@@ -54,7 +54,7 @@ if args.plot_prob:
 
 with torch.no_grad():
     for i, test_batch in tqdm(enumerate(test_loader), total=len(test_loader), bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}"):
-        if args.plot_prob:
+        if args.plot_prob: #and (args.train_mode == 'binary_class'):
             test_x, test_y, pressure = test_batch
         else:
             test_x, test_y = test_batch
@@ -65,14 +65,18 @@ with torch.no_grad():
         evaluator.add_batch(test_y.cpu(), logits.cpu(), loss, test=True)
 
         if args.plot_prob:
-            prob_np = np.apply_along_axis(logit2prob, 0, np.array(logits.cpu()))
+            if args.train_mode == 'regression':
+                prob_np = np.array(logits.cpu().float())
+            else:
+                prob_np = np.apply_along_axis(logit2prob, 0, np.array(logits.cpu()))
+                
             if type(prob) == list:
                 prob = prob_np
                 label = np.array(pressure)
             else:
                 prob = np.concatenate((prob, prob_np))
                 label = np.concatenate((label, np.array(pressure)))
-        print(loss)
+        
     if args.train_mode == 'binary_class':
         f1, auc, apr, acc = evaluator.performance_metric()
         print ('f1: {}, auc: {}, apr: {}, acc: {}'.format(f1, auc, apr, acc))
@@ -84,7 +88,6 @@ with torch.no_grad():
         result_dict = {'rmse': loss}
 
 if args.plot_prob:
-    import ipdb; ipdb.set_trace()
     scatterplot(args, label, prob)
 
 torch.save(result_dict, result_ckpt)
