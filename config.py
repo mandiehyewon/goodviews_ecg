@@ -38,6 +38,7 @@ parser.add_argument("--model", type=str, default="cnn1d_lstm")  # model name
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)
 parser.add_argument("--hidden-dim", type=int, default=100)
+parser.add_argument("--rep-dim", type=int, default=100)
 
 # Loss Parameters
 parser.add_argument("--eps", type=float, default=1e-6)  # eps for RMSE
