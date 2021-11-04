@@ -11,6 +11,10 @@ def get_loss(args):
         return nn.BCEWithLogitsLoss()
         # return nn.BCELoss(reduction='mean')
 
+
+def get_pclr_loss(device):
+    return torch.nn.CrossEntropyLoss().to(device)
+
 class RMSELoss(nn.Module):
     def __init__(self, args):
         super().__init__()
