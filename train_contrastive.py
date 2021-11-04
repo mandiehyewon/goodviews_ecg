@@ -9,7 +9,7 @@ import torch.optim as optim
 from config import args
 from data import get_data
 from model import get_model
-from utils.loss import get_pclr_loss
+from utils.loss import get_contrastive_loss, contrastive_logits
 from utils.metrics import Evaluator
 from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
@@ -23,7 +23,7 @@ logger = Logger(args)
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
 
-criterion = get_pclr_loss(device)
+criterion = get_contrastive_loss(device)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
 
@@ -36,10 +36,9 @@ for epoch in range(1, args.epochs + 1):
         train_x, train_y = train_x.to(device), train_y.to(device)
 
         features = model(train_x)# features.shape = [2*batch_size, rep_dim] where rep_dim
-        logits, labels = self.info_nce_loss(features)
-        loss = self.criterion(logits, labels)
+        logits, labels = constrative_logits(features)
+        loss = criterion(logits, labels)
 
-        loss = criterion(logits.float(), train_y.unsqueeze(1).float())
         logger.loss += loss.item()
 
         optimizer.zero_grad()
