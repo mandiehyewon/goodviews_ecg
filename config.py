@@ -38,7 +38,6 @@ parser.add_argument("--model", type=str, default="cnn1d_lstm")  # model name
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)
 parser.add_argument("--hidden-dim", type=int, default=100)
-parser.add_argument("--rep-dim", type=int, default=100)
 
 # Loss Parameters
 parser.add_argument("--eps", type=float, default=1e-6)  # eps for RMSE
@@ -53,6 +52,13 @@ parser.add_argument("--best", default=True, action="store_true")
 parser.add_argument("--last", default=False, action="store_true")
 parser.add_argument("--plot-prob", default=False, action="store_true")
 args = parser.parse_args()
+
+# Parameters for PCLR implementation
+parser.add_argument("--rep-dim", type=int, default=100, help='representation dimension that the input is encoded '
+                                                             'after going through the model.')
+parser.add_argument("--temp", type=int, default=100, help='temperature parameter that scales the cosine similarity; '
+                                                          'represented as tau in the paper')
+
 
 # Dataset Path settings
 with open("path_configs.yaml") as f:
