@@ -1,0 +1,2 @@
+dir_csv: ../data/ChapmanECG
+dir_result: ./result/
