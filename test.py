@@ -5,11 +5,11 @@ from tqdm import tqdm
 import numpy as np
 
 import torch
+import torch.nn as nn
 
 from config import args
 from data import get_data
 from model import get_model
-from utils.loss import get_loss
 from utils.metrics import Evaluator
 from utils.utils import set_devices, logit2prob, scatterplot
 
@@ -23,7 +23,7 @@ device = set_devices(args)
 
 model = get_model(args, device=device)
 evaluator = Evaluator(args)
-criterion = get_loss(args)
+criterion = nn.BCEWithLogitsLoss()
 
 # Check if result exists
 result_ckpt = os.path.join(args.dir_result, name, 'test_result.pth')

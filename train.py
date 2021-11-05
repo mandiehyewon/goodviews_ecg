@@ -9,7 +9,6 @@ import torch.optim as optim
 from config import args
 from data import get_data
 from model import get_model
-from utils.loss import get_loss
 from utils.metrics import Evaluator
 from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
@@ -23,7 +22,7 @@ logger = Logger(args)
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
 
-criterion = get_loss(args)
+criterion = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
 
