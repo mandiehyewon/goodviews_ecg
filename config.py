@@ -24,6 +24,10 @@ parser.add_argument("--dropout", type=float, default=0.3)
 parser.add_argument("--decay-rate", type=int, default=0.1)
 parser.add_argument("--decay-iter", type=int, default=56000)
 
+# Training Parameters for Contrastive Learning
+parser.add_argument("--temperature", type=float, default=0.07)
+
+
 # Data Parameters
 parser.add_argument('--data', type=str, default="whole")
 parser.add_argument("--normalize", default=False, action="store_true")
