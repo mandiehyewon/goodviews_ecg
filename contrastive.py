@@ -21,7 +21,8 @@ def get_contrastive_loss(features, labels, args):
     similarity_matrix_exp = torch.exp(similarity_matrix)
     numerators = torch.sum(torch.mul(similarity_matrix_exp, labels), dim=1)
     denominators = torch.sum(similarity_matrix_exp, dim=1)
-    loss = -torch.log(torch.div(numerators, denominators))
+    eps = 1e-7
+    loss = -torch.log(torch.div(numerators, denominators + eps))
     loss = loss.sum(dim=0)
     return loss
 
