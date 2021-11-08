@@ -42,7 +42,7 @@ def get_data(args):
 
 def save_trainid(args):
     print(args.dir_csv)
-    df_tab = pd.read_excel(os.path.join("/mnt/aitrics_ext/ext01/mandy/data/ChapmanECG", "Diagnostics.xlsx"))
+    df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
 
     frac_train = 0.6  # t:t:v = 6:2:2
     frac_val = 0.2
