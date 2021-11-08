@@ -14,8 +14,6 @@ from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
 from utils.lr_scheduler import LR_Scheduler
 
-from contrastive import get_contrastive_loss
-
 seed = set_seeds(args)
 device = set_devices(args)
 logger = Logger(args)
@@ -24,7 +22,7 @@ logger = Logger(args)
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
 
-# criterion = nn.BCEWithLogitsLoss()
+criterion = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
 
@@ -33,12 +31,12 @@ pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}
 for epoch in range(1, args.epochs + 1):
     loss = 0
     for train_batch in train_loader:
-        train_x, labels = train_batch
-        train_x, labels = train_x.to(device), labels.to(device)
+        train_x, train_y, _ = train_batch
+        train_x, train_y = train_x.to(device), train_y.to(device)
+        import ipdb; ipdb.set_trace()
 
-        encoded = model(train_x)
-        # encoded.shape = [args.batch_size, args.dim], labels.shape = [args.batch_size, args.batch_size]
-        loss = get_contrastive_loss(encoded, labels, args)
+        logits = model(train_x)
+        loss = criterion(logits.float(), train_y.unsqueeze(1).float())
         logger.loss += loss.item()
 
         optimizer.zero_grad()
@@ -57,7 +55,7 @@ for epoch in range(1, args.epochs + 1):
         logger.evaluator.reset()
         with torch.no_grad():
             for batch in val_loader:
-                val_x, val_y = batch
+                val_x, val_y, _ = batch
                 val_x, val_y = val_x.to(device), val_y.to(device)
 
                 logits = model(val_x)
