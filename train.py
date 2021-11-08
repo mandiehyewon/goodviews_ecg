@@ -35,7 +35,7 @@ for epoch in range(1, args.epochs + 1):
         train_x, train_y = train_x.to(device), train_y.to(device)
 
         encoded = model(train_x)
-        loss = get_contrastive_loss(train_x, train_y, args)
+        loss = get_contrastive_loss(encoded, train_y, args)
         logger.loss += loss.item()
 
         optimizer.zero_grad()
