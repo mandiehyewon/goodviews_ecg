@@ -34,7 +34,7 @@ for epoch in range(1, args.epochs + 1):
     loss = 0
     for train_batch in train_loader:
         train_x, labels = train_batch
-        train_x, train_y = train_x.to(device), labels.to(device)
+        train_x, labels = train_x.to(device), labels.to(device)
 
         encoded = model(train_x)
         # encoded.shape = [args.batch_size, args.dim], labels.shape = [args.batch_size, args.batch_size]
