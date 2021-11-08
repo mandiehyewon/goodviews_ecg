@@ -35,7 +35,7 @@ parser.add_argument("--normalize", default=False, action="store_true")
 parser.add_argument("--label", type=str, default="age", choices=["age", "gender"])
 
 # Model Parameters
-parser.add_argument("--model", type=str, default="cnn")  # model name
+parser.add_argument("--model", type=str, default="contrastive")  # model name
 
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)
