@@ -9,9 +9,9 @@ from .ecg_loader import ECGDataset
 
 def get_data(args):
     df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
-    train_ids = np.load("./stores/train_ids.npy")
-    val_ids = np.load("./stores/val_ids.npy")
-    test_ids = np.load("./stores/test_ids.npy")
+    train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
+    val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
+    test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
 
     train_df = df_tab[df_tab["FileName"].isin(train_ids)]
     val_df = df_tab[df_tab["FileName"].isin(val_ids)]

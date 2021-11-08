@@ -10,9 +10,9 @@ from torch.utils.data import DataLoader
 
 
 class ECGDataset(Dataset):
-    def __init__(self, label, dir_csv, df):  # , augment=False):
-        self.label = label
-        self.dir_csv = dir_csv
+    def __init__(self, args, df):  # , augment=False):
+        self.label = args.label
+        self.dir_csv = args.dir_csv
         self.df = df
 
     def __len__(self):
@@ -22,7 +22,7 @@ class ECGDataset(Dataset):
         row = self.df.iloc[idx]
         # load ECG
         file = row["FileName"]
-        fname = os.path.join(self.dir_csv, f"{file}.csv")
+        fname = os.path.join(self.dir_csv, "ECGDataDenoised", f"{file}.csv")
 
         x = pd.read_csv(fname, header=None).values.astype(np.float32)
 
@@ -43,4 +43,3 @@ def normalize_frame(frame):
             torch.max(frame) - torch.min(frame) + 1e-8
         )
     return frame
-
