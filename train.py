@@ -37,7 +37,7 @@ for epoch in range(1, args.epochs + 1):
         train_x, train_y = train_x.to(device), labels.to(device)
 
         encoded = model(train_x)
-
+        # encoded.shape = [args.batch_size, args.dim], labels.shape = [args.batch_size, args.batch_size]
         loss = get_contrastive_loss(encoded, labels, args)
         logger.loss += loss.item()
 
