@@ -14,6 +14,7 @@ parser.add_argument("--reset", default=False, action="store_true")
 parser.add_argument("--seed", type=int, default=926)
 
 # Training Parameters
+parser.add_argument("--dim", type=int, default=100)
 parser.add_argument("--epochs", type=int, default=300)
 parser.add_argument("--batch-size", type=int, default=64)
 parser.add_argument("--lr", type=float, default=1e-4)
@@ -23,6 +24,10 @@ parser.add_argument('--warmup-iters', type=int, default=0)
 parser.add_argument("--dropout", type=float, default=0.3)
 parser.add_argument("--decay-rate", type=int, default=0.1)
 parser.add_argument("--decay-iter", type=int, default=56000)
+
+# Training Parameters for Contrastive Learning
+parser.add_argument("--temperature", type=float, default=0.07)
+
 
 # Data Parameters
 parser.add_argument('--data', type=str, default="whole")
