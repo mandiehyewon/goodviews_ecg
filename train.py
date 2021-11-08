@@ -57,10 +57,10 @@ for epoch in range(1, args.epochs + 1):
                 val_x, val_y, _ = batch
                 val_x, val_y = val_x.to(device), val_y.to(device)
 
-                logits = model(val_x)
-
-                loss = criterion(logits.float(), val_y.unsqueeze(1).float())
-                logger.evaluator.add_batch(val_y.cpu(), logits.cpu(), loss)
+                encoded = model(val_x)
+                loss = get_contrastive_loss(encoded, val_y, args)
+                logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
+                
             logger.add_validation_logs(epoch, loss)
         model.train()
     logger.save(model, optimizer, epoch)
@@ -71,5 +71,5 @@ logger.writer.close()
 
 print("\n Finished training.......... Please Start Testing with test.py")
 
-if __name__ == "__main__":
-    pass
+# if __name__ == "__main__":
+#     pass
