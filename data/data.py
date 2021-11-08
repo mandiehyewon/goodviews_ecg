@@ -9,6 +9,11 @@ from .ecg_loader import ECGDataset, normalize_frame
 
 def get_data(args):
     df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
+
+    df_tab = df_tab.loc[df_tab.PatientAge >= 18].copy()
+    df_tab['age_bucket'] = pd.cut(df_tab.PatientAge, bins=[17,34,44,49,54,59,64,69,74,79,84,100])
+    df_tab["group"] = pd.Categorical(df_tab.age_bucket.astype(str) + df_tab.Gender.astype(str)).codes
+
     train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
     val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
     test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
