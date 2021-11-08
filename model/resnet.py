@@ -166,7 +166,7 @@ class ResNetEncoder(nn.Module):
 
     def __init__(self, block, layers, embed_size = 128):
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        super(ResNetEncoder, self).__init__()
         self.conv1 = nn.Conv1d(12, 64, kernel_size=15, stride=2, padding=7,
                                bias=False)
         self.bn1 = nn.BatchNorm1d(64)
@@ -231,7 +231,7 @@ def resnet18(pretrained=False, **kwargs):
         model.load_state_dict(model_zoo.load_url(model_urls['resnet18']))
     return model
 
-def resnet18_constrastive(pretrained=False, **kwargs):
+def resnet18_contrastive(pretrained=False, **kwargs):
     """Constructs a ResNet-18 encoder model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
