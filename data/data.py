@@ -4,11 +4,11 @@ import pandas as pd
 from torch.utils.data import DataLoader
 
 from config import args
-from .chapman import ECGDataset
+from .ecg_loader import ECGDataset
 
 
 def get_data(args):
-    df_tab = pd.read_csv(os.path.join(args.dir_csv, "FileName.csv"))
+    df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
     train_ids = np.load("./stores/train_ids.npy")
     val_ids = np.load("./stores/val_ids.npy")
     test_ids = np.load("./stores/test_ids.npy")
@@ -41,7 +41,9 @@ def get_data(args):
 
 
 def save_trainid(args):
-    df_tab = pd.read_csv(os.path.join(args.dir_csv, "tabular_data.csv"))
+    print(args.dir_csv)
+    df_tab = pd.read_excel(os.path.join("/mnt/aitrics_ext/ext01/mandy/data/ChapmanECG", "Diagnostics.xlsx"))
+
     frac_train = 0.6  # t:t:v = 6:2:2
     frac_val = 0.2
 
