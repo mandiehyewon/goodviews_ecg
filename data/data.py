@@ -4,16 +4,11 @@ import pandas as pd
 from torch.utils.data import DataLoader
 
 from config import args
-from .ecg_loader import ECGDataset
+from .ecg_loader import ECGDataset, normalize_frame
 
 
 def get_data(args):
     df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
-    
-    df_tab = df_tab.loc[df_tab.PatientAge >= 18].copy()
-    df_tab['age_bucket'] = pd.cut(df_tab.PatientAge, bins=[17,34,44,49,54,59,64,69,74,79,84,100])
-    df_tab["group"] = pd.Categorical(df_tab.age_bucket.astype(str) + df_tab.Gender.astype(str)).codes
-
     train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
     val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
     test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
@@ -66,5 +61,24 @@ def save_trainid(args):
     np.save("./stores/train_ids.npy", train_ids)
     np.save("./stores/val_ids.npy", val_ids)
     np.save("./stores/test_ids.npy", test_ids)
+
+    return
+    fname = os.path.join(args.dir_csv, "ECGDataDenoised", f"{MUSE_20180112_073319_29000}.csv")
+
+def screen_out(args):
+    rm_pts = []
+    df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
+    for file in df_tab["FileName"]:
+        fname = os.path.join(args.dir_csv, "ECGDataDenoised", f"{file}.csv")
+        x = pd.read_csv(fname, header=None).values.astype(np.float32)
+        x = normalize_frame(x).T
+        
+        if x.shape == (12, 5000):
+            pass
+        else:
+            print('-------Different Shape------'+file)
+            rm_pts.append(file)
+
+    np.save('./stores/rm_pts.npy', np.array(rm_pts))
 
     return
