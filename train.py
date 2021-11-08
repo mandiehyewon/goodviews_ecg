@@ -36,6 +36,7 @@ for epoch in range(1, args.epochs + 1):
 
         encoded = model(train_x)
         loss = get_contrastive_loss(encoded, train_y, args)
+        print(loss)
         logger.loss += loss.item()
 
         optimizer.zero_grad()
@@ -60,7 +61,7 @@ for epoch in range(1, args.epochs + 1):
                 encoded = model(val_x)
                 loss = get_contrastive_loss(encoded, val_y, args)
                 logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
-                
+
             logger.add_validation_logs(epoch, loss)
         model.train()
     logger.save(model, optimizer, epoch)
