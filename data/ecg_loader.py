@@ -26,9 +26,7 @@ class ECGDataset(Dataset):
 
         x = pd.read_csv(fname, header=None).values.astype(np.float32)
 
-        if self.label == "condition":
-            y = 0 + 1 * (row["Beat"] != "NONE")
-
+        y = 0 + 1 * (row["Beat"] != "NONE")
         x = normalize_frame(x)
 
         group = row["group"]
