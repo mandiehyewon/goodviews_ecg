@@ -9,4 +9,5 @@ pytorch == 1.10.0
 
 ## Self-Supervised Model Trainnig
 ```
+python train.py --model contrastive
 ```
