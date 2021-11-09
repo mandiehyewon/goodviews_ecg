@@ -12,8 +12,8 @@ from model import get_model
 from utils.metrics import Evaluator
 from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
+from utils.loss import get_contrastive_loss
 from utils.lr_scheduler import LR_Scheduler
-from contrastive import get_contrastive_loss
 
 seed = set_seeds(args)
 device = set_devices(args)
@@ -35,7 +35,7 @@ for epoch in range(1, args.epochs + 1):
         train_x, train_y = train_x.to(device), train_y.to(device)
 
         encoded = model(train_x)
-        loss = get_contrastive_loss(encoded, train_y, args)
+        loss = get_contrastive_loss(args, encoded, train_y, device)
         print(loss)
         logger.loss += loss.item()
 
@@ -59,7 +59,7 @@ for epoch in range(1, args.epochs + 1):
                 val_x, val_y = val_x.to(device), val_y.to(device)
 
                 encoded = model(val_x)
-                loss = get_contrastive_loss(encoded, val_y, args)
+                loss = get_contrastive_loss(args, encoded, val_y, device)
                 logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
 
             logger.add_validation_logs(epoch, loss)

@@ -1,10 +1,11 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
-from config import args
 
+def get_loss(args):
+    return nn.BCEWithLogitsLoss()
 
-def get_contrastive_loss(features, labels, args):
+def get_contrastive_loss(args, features, labels, device):
     features = F.normalize(
         features, p=2, dim=1
     )  # normalize for each row's L-2 norm become 1; this makes torch.matmul produce cosine similiarity matrix without scaling factors
@@ -14,7 +15,7 @@ def get_contrastive_loss(features, labels, args):
 
     similarity_matrix = similarity_matrix * (
         1 - torch.eye(args.batch_size, args.batch_size)
-    )  # make each diagonal to be zero
+    ).to(device)  # make each diagonal to be zero
     similarity_matrix = similarity_matrix / args.temperature
     similarity_matrix_exp = torch.exp(similarity_matrix)
     # print(labels)

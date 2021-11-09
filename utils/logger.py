@@ -55,10 +55,7 @@ class Logger:
         # print(self.args_save)
 
     def log_tqdm(self, pbar):
-        if self.args.train_mode =='regression':
-            tqdm_log = 'loss: {:.5f}, best_loss: {:.5f}, best_iter: {}'.format(self.loss/self.log_iter, self.best_loss, self.best_iter)
-        else:
-            tqdm_log = 'loss: {:.5f}, auc: {:.5f}, best_iter: {}'.format(self.loss/self.log_iter, self.best_auc, self.best_iter)
+        tqdm_log = 'loss: {:.5f}, auc: {:.5f}, best_iter: {}'.format(self.loss/self.log_iter, self.best_auc, self.best_iter)
         pbar.set_description(tqdm_log)
         
     def log_scalars(self, step):
