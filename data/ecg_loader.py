@@ -31,7 +31,7 @@ class ECGDataset(Dataset):
 
         group = row["group"]
 
-        return x.T, y, group
+        return x.T, y, group, fname
 
 def normalize_frame(frame):
     if isinstance(frame, np.ndarray):

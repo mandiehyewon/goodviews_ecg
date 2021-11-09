@@ -26,21 +26,30 @@ model = get_model(args, device=device)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
 
+
 ### TRAINING
 pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
 for epoch in range(1, args.epochs + 1):
     loss = 0
     for train_batch in train_loader:
-        train_x, train_y, _ = train_batch
+        train_x, train_y, group, fname = train_batch
         train_x, train_y = train_x.to(device), train_y.to(device)
-
         encoded = model(train_x)
+        # if torch.isnan(encoded).sum() > 0:
+        #     print("fname")
+        #     print(fname)
+        #     print("X")
+        #     print(train_x)
+        #     print("Encoded X")
+        #     print(encoded)
+        #     sys.exit()
         loss = get_contrastive_loss(args, encoded, train_y, device)
         print(loss)
         logger.loss += loss.item()
 
         optimizer.zero_grad()
         loss.backward()
+        # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
 
     ## LOGGING

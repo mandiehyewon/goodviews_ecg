@@ -16,20 +16,36 @@ def get_contrastive_loss(args, features, labels, device):
     similarity_matrix = similarity_matrix * (
         1 - torch.eye(args.batch_size, args.batch_size)
     ).to(device)  # make each diagonal to be zero
+
     similarity_matrix = similarity_matrix / args.temperature
+    # similarity_matrix = similarity_matrix / (args.temperature * args.batch_size)
     similarity_matrix_exp = torch.exp(similarity_matrix)
     # print(labels)
     # neg_labels = (labels == 0).type(torch.uint8)
     numerators = torch.sum(torch.mul(similarity_matrix_exp, labels), dim=1)
+
     # denominators = torch.sum(torch.mul(similarity_matrix_exp, neg_labels), dim=1)
     denominators = torch.sum(similarity_matrix_exp, dim=1)  # denominator should be > numerators
     eps = 1e-7
+
     p = torch.div(numerators, denominators + eps)
     # print("p", p, 0 < p, p <1)
-    print(p+eps)
     loss = - torch.log(p+eps)
-    loss = loss.sum(dim=0)
-    loss /= args.batch_size
+    loss = loss.mean(dim=0)
+    # loss /= args.batch_size
+
+    # print("Similarity")
+    # print(similarity_matrix)
+    # print("Exp Similarity")
+    # print(similarity_matrix_exp)
+    # print("Numerator")
+    # print(numerators)
+    # print("Denom")
+    # print(denominators)
+    # print("p")
+    # print(p+eps)
+    # print("Loss")
+
     return loss
 
 
