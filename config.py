@@ -37,6 +37,7 @@ parser.add_argument("--label", type=str, default="age", choices=["age", "gender"
 
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
+parser.add_argument("--viewtype", type=str, default="demos", choices=["demos", "rhythm", "clocs", "simclr", "similarity"])
 
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)

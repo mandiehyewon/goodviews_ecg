@@ -5,7 +5,7 @@ import torch.nn.functional as F
 def get_loss(args):
     return nn.BCEWithLogitsLoss()
 
-def get_contrastive_loss(args, features, labels, device):
+def get_contrastive_loss(args, features, group_labels, device):
     features = F.normalize(
         features, p=2, dim=1
     )  # normalize for each row's L-2 norm become 1; this makes torch.matmul produce cosine similiarity matrix without scaling factors
@@ -14,17 +14,15 @@ def get_contrastive_loss(args, features, labels, device):
     )  # similiarty matrix.shape = [batch_size, batch_size]
 
     similarity_matrix = similarity_matrix * (
-        1 - torch.eye(args.batch_size, args.batch_size)
+        1 - torch.eye(similarity_matrix.size()[0], similarity_matrix.size()[0])
     ).to(device)  # make each diagonal to be zero
 
+    equality_matrix = 1*(group_labels[None,:]==group_labels[:,None])
     similarity_matrix = similarity_matrix / args.temperature
     # similarity_matrix = similarity_matrix / (args.temperature * args.batch_size)
     similarity_matrix_exp = torch.exp(similarity_matrix)
-    # print(labels)
-    # neg_labels = (labels == 0).type(torch.uint8)
-    numerators = torch.sum(torch.mul(similarity_matrix_exp, labels), dim=1)
 
-    # denominators = torch.sum(torch.mul(similarity_matrix_exp, neg_labels), dim=1)
+    numerators = torch.sum(torch.mul(similarity_matrix_exp, equality_matrix), dim=1)
     denominators = torch.sum(similarity_matrix_exp, dim=1)  # denominator should be > numerators
     eps = 1e-7
 
@@ -51,7 +49,7 @@ def get_contrastive_loss(args, features, labels, device):
 
 if __name__ == "__main__":
     temperature = 0.07  #
-    batch_size = 64
+    batch_size = args.batch_size
     dim = 100
     labels = torch.randint(2, [args.batch_size, args.batch_size])
     features = torch.rand(batch_size, dim)
