@@ -14,6 +14,7 @@ from utils.logger import Logger
 from utils.utils import set_seeds, set_devices
 from utils.loss import get_contrastive_loss
 from utils.lr_scheduler import LR_Scheduler
+from sklearn.metrics import roc_auc_score
 
 seed = set_seeds(args)
 device = set_devices(args)
@@ -77,7 +78,7 @@ for epoch in range(1, args.epochs + 1):
 # Downstream Training
 model.eval()
 dw_learning_rate = 1e-2
-dw_epochs = 10
+dw_epochs = -1
 dw_criterion = nn.CrossEntropyLoss()
 dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
 
@@ -87,10 +88,9 @@ for epoch in range(1, dw_epochs + 1):
     for train_batch in train_loader:
         train_x, train_y, train_group, train_fnames = train_batch
         train_x = train_x.to(device)
-        print(model(train_x).size())
-        break
+
         dw_pred = classifier(model(train_x))
-        dw_loss = dw_criterion(dw_pred, train_y.astype(torch.long))
+        dw_loss = dw_criterion(dw_pred, train_y.to(torch.long))
         
         print(f"downstream_loss:{dw_loss}")
         
@@ -98,7 +98,26 @@ for epoch in range(1, dw_epochs + 1):
         dw_loss.backward()
         dw_optimizer.step()
 
-print("\n Finished training.......... Please Start Testing with test.py")
+print("\n Finished training..........Starting Test")
 
-# if __name__ == "__main__":
-#     pass
+
+with torch.no_grad():
+    model.eval()
+    classifier.eval()
+    y_pred = []
+    y_target = []
+
+    for (i,test_batch) in enumerate(test_loader):
+        test_x, test_y, test_group, test_fnames = test_batch
+        test_x = test_x.to(device)
+        test_pred = classifier(model(test_x))
+        y_pred.append(test_pred)
+        y_target.append(test_y)
+        if i > 3:
+            break
+
+    y_pred = torch.cat(y_pred, dim=0).numpy()
+    y_target = nn.functional.one_hot(torch.cat(y_target,dim=0).to(torch.int64), num_classes=nlabels).numpy()
+
+    test_auc = roc_auc_score(y_true=y_target, y_score=y_pred)
+    print(f"Test AUC:{test_auc}")
