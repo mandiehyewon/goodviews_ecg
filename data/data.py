@@ -17,11 +17,11 @@ def get_data(args):
     df_tab = df_tab.loc[df_tab.PatientAge >= 18].copy()
     df_tab['age_bucket'] = pd.cut(df_tab.PatientAge, bins=[17,34,44,49,54,59,64,69,74,79,84,100])
 
-    df_tab['y'] = 0
     df_tab.loc[df_tab['Rhythm'].isin(["AF", "AFIB"]), 'y'] = 1
     df_tab.loc[df_tab['Rhythm'].isin(["SVT", "AT", "SAAWR", "ST", "AVNRT", "AVRT"]), 'y'] = 2
     df_tab.loc[df_tab['Rhythm'].isin(["SB"]), 'y'] = 3
-    df_tab.loc[df_tab['Rhythm'].isin(["SR", "SI"]), 'y'] = 4
+    df_tab.loc[df_tab['Rhythm'].isin(["SR", "SI", "SA"]), 'y'] = 4
+    print(df_tab.groupby('y').agg('count'))
     df_tab['y'] = df_tab.copy()['y'] - 1
 
     if args.viewtype=="demos":
