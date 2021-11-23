@@ -22,7 +22,7 @@ logger = Logger(args)
 # Load Data, Create Model
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
-classifier
+classifier = get_downstream_classifier(args, nlabels = 4) # change hardcoded 4
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
@@ -69,25 +69,29 @@ for epoch in range(1, args.epochs + 1):
     # logger.save(model, optimizer, epoch)
     # pbar.update(1)
 
-        # # DOWNSTREAM: Multi-label Downstream Task # #
-        model.eval()
-        classifier.train()
-        # # HYPER-PARAMS FOR DOWNSTREAM
-        dw_learning_rate = 0.1
-        # dw_epochs = 100 # we're going to train downstream at the same time w/ contrastive learning.
-
-        dw_criterion = nn.CrossEntropyLoss()
-        dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
-
-        dw_pred = classifier(train_x)
-        dw_loss = dw_criterion(dw_pred, train_y)
-        print(f"downstream_loss:{dw_loss}")
-        dw_loss.backward()
-        dw_optimizer.step()  # this will only update classifiers model params.
-
-
 ckpt = logger.save(model, optimizer, epoch, last=True)
 logger.writer.close()
+
+# Downstream Training
+model.eval()
+dw_learning_rate = 1e-2
+dw_criterion = nn.CrossEntropyLoss()
+dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
+
+for epoch in range(1, args.epochs + 1):
+    loss = 0
+    classifier.train()
+    for train_batch in train_loader:
+        train_x, train_y, train_group, train_fnames = train_batch
+        train_x = train_x.to(device)
+        dw_pred = classifier(model(train_x))
+        dw_loss = dw_criterion(dw_pred, train_y)
+        
+        print(f"downstream_loss:{dw_loss}")
+        
+        dw_optimizer.zero_grad()
+        dw_loss.backward()
+        dw_optimizer.step()
 
 print("\n Finished training.......... Please Start Testing with test.py")
 

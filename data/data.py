@@ -22,6 +22,7 @@ def get_data(args):
     df_tab.loc[df_tab['Rhythm'].isin(["SVT", "AT", "SAAWR", "ST", "AVNRT", "AVRT"]), 'y'] = 2
     df_tab.loc[df_tab['Rhythm'].isin(["SB"]), 'y'] = 3
     df_tab.loc[df_tab['Rhythm'].isin(["SR", "SI"]), 'y'] = 4
+    df_tab['y'] = df_tab.copy()['y'] - 1
 
     if args.viewtype=="demos":
         df_tab["group"] = pd.Categorical(df_tab.age_bucket.astype(str) + df_tab.Gender.astype(str)).codes
