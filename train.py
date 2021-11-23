@@ -78,7 +78,7 @@ for epoch in range(1, args.epochs + 1):
 # Downstream Training
 model.eval()
 dw_learning_rate = 1e-2
-dw_epochs = -1
+dw_epochs = 10
 dw_criterion = nn.CrossEntropyLoss()
 dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
 
@@ -113,8 +113,6 @@ with torch.no_grad():
         test_pred = classifier(model(test_x))
         y_pred.append(test_pred)
         y_target.append(test_y)
-        if i > 3:
-            break
 
     y_pred = torch.cat(y_pred, dim=0).numpy()
     y_target = nn.functional.one_hot(torch.cat(y_target,dim=0).to(torch.int64), num_classes=nlabels).numpy()
