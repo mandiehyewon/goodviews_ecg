@@ -33,7 +33,7 @@ parser.add_argument("--temperature", type=float, default=0.07)
 # Data Parameters
 parser.add_argument('--data', type=str, default="whole")
 parser.add_argument("--normalize", default=False, action="store_true")
-parser.add_argument("--label", type=str, default="age", choices=["age", "gender"])
+parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
