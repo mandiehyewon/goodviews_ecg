@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
-from .augment import Augment
+from .augment import augment
 
 
 class ECGDataset(Dataset):
@@ -16,6 +16,7 @@ class ECGDataset(Dataset):
         self.label = args.label
         self.dir_csv = args.dir_csv
         self.df = df
+        self.viewtype = args.viewtype
 
     def __len__(self):
         return len(self.df)
@@ -31,9 +32,9 @@ class ECGDataset(Dataset):
         y = row["y"]
         x = normalize_frame(x)
 
-        if args.viewtype == 'demo':
+        if self.viewtype == 'demos':
             group = row["group"]
-        elif args.viewtype == 'simclr':
+        elif self.viewtype == 'simclr':
             group = random.randint(1,3)
             x = augment(self.args, group, x)
 

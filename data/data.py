@@ -21,7 +21,6 @@ def get_data(args):
     df_tab.loc[df_tab['Rhythm'].isin(["SVT", "AT", "SAAWR", "ST", "AVNRT", "AVRT"]), 'y'] = 2
     df_tab.loc[df_tab['Rhythm'].isin(["SB"]), 'y'] = 3
     df_tab.loc[df_tab['Rhythm'].isin(["SR", "SI", "SA"]), 'y'] = 4
-    print(df_tab.groupby('y').agg('count'))
     df_tab['y'] = df_tab.copy()['y'] - 1
 
     if args.viewtype=="demos":

@@ -71,23 +71,26 @@ for epoch in range(1, args.epochs + 1):
     # logger.save(model, optimizer, epoch)
     # pbar.update(1)
 
-ckpt = logger.save(model, optimizer, epoch, last=True)
-logger.writer.close()
+# ckpt = logger.save(model, optimizer, epoch, last=True)
+# logger.writer.close()
 
 # Downstream Training
 model.eval()
 dw_learning_rate = 1e-2
+dw_epochs = 10
 dw_criterion = nn.CrossEntropyLoss()
 dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
 
-for epoch in range(1, args.epochs + 1):
+for epoch in range(1, dw_epochs + 1):
     loss = 0
     classifier.train()
     for train_batch in train_loader:
         train_x, train_y, train_group, train_fnames = train_batch
         train_x = train_x.to(device)
+        print(model(train_x).size())
+        break
         dw_pred = classifier(model(train_x))
-        dw_loss = dw_criterion(dw_pred, train_y)
+        dw_loss = dw_criterion(dw_pred, train_y.astype(torch.long))
         
         print(f"downstream_loss:{dw_loss}")
         
