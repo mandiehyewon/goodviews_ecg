@@ -8,6 +8,8 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
+from .augment import Augment
+
 
 class ECGDataset(Dataset):
     def __init__(self, args, df):  # , augment=False):
@@ -28,7 +30,12 @@ class ECGDataset(Dataset):
 
         y = row["y"]
         x = normalize_frame(x)
-        group = row["group"]
+
+        if args.viewtype == 'demo':
+            group = row["group"]
+        elif args.viewtype == 'simclr':
+            group = random.randint(1,3)
+            x = augment(self.args, group, x)
 
         return x.T, y, group, fname
 

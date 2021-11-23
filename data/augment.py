@@ -4,10 +4,7 @@
 # 3: amplitude scale
 
 
-def Augment(args, features):
-    augment_type = random.randint(1,3)
-    fs = float(args.sample_rate)
-
+def augment(args, augment_type, features):
     feature = features[0]
     channel_num = feature.size(0) #12
     time_axis_length = feature.size(1)
