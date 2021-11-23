@@ -42,6 +42,7 @@ parser.add_argument("--viewtype", type=str, default="demos", choices=["demos", "
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)
 parser.add_argument("--hidden-dim", type=int, default=100)
+parser.add_argument("--embed-size", type=int, default=100)
 
 # Loss Parameters
 parser.add_argument("--eps", type=float, default=1e-6)  # eps for RMSE

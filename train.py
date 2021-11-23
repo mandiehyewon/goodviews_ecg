@@ -22,7 +22,9 @@ logger = Logger(args)
 # Load Data, Create Model
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
-classifier = get_downstream_classifier(args, nlabels = 4) # change hardcoded 4
+
+nlabels = 4
+classifier = nn.Linear(args.embed_size, nlabels).to(device)
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
