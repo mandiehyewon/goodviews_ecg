@@ -35,6 +35,14 @@ parser.add_argument('--data', type=str, default="whole")
 parser.add_argument("--normalize", default=False, action="store_true")
 parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
+# Augmentation Parameters
+parser.add_argument('--amplitude-min', type=float, default=0.5)
+parser.add_argument('--amplitude-max', type=int, default=2)
+parser.add_argument('--time-shift-min', type=int, default=-50, help='number of samples')
+parser.add_argument('--time-shift-max', type=int, default=50, help='number of samples')
+parser.add_argument('--zero-masking-min', type=int, default=0)
+parser.add_argument('--zero-masking-max', type=int, default=150)
+
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
 parser.add_argument("--viewtype", type=str, default="demos", choices=["demos", "rhythm", "clocs", "simclr", "similarity"])
