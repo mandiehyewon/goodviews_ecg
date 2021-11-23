@@ -69,10 +69,21 @@ for epoch in range(1, args.epochs + 1):
     # logger.save(model, optimizer, epoch)
     # pbar.update(1)
 
-model.eval()
-for epoch in range(1, args.epochs + 1):
-    pred_class = classifier(train_x)
-    loss(pred_class, train_y)
+        # # DOWNSTREAM: Multi-label Downstream Task # #
+        model.eval()
+        classifier.train()
+        # # HYPER-PARAMS FOR DOWNSTREAM
+        dw_learning_rate = 0.1
+        # dw_epochs = 100 # we're going to train downstream at the same time w/ contrastive learning.
+
+        dw_criterion = nn.CrossEntropyLoss()
+        dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
+
+        dw_pred = classifier(train_x)
+        dw_loss = dw_criterion(dw_pred, train_y)
+        print(f"downstream_loss:{dw_loss}")
+        dw_loss.backward()
+        dw_optimizer.step()  # this will only update classifiers model params.
 
 
 ckpt = logger.save(model, optimizer, epoch, last=True)
