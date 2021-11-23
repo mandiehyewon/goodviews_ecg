@@ -12,7 +12,7 @@ def get_model(args, device=None):
         pass
 
     if args.model == "contrastive":
-        model = resnet18_contrastive()
+        model = resnet18_contrastive(embed_size = args.embed_size)
         pass
 
     else:
