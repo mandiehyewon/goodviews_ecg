@@ -22,6 +22,7 @@ logger = Logger(args)
 # Load Data, Create Model
 train_loader, val_loader, test_loader = get_data(args)
 model = get_model(args, device=device)
+classifier
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_iter=args.lr_sch_start, warmup_iters=args.warmup_iters, functional=True)
@@ -44,29 +45,35 @@ for epoch in range(1, args.epochs + 1):
         # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
 
-    ## LOGGING
-    if epoch % args.log_iter == 0:
-        logger.log_tqdm(pbar)
-        logger.log_scalars(epoch)
-        logger.loss_reset()
+    # ## LOGGING
+    # if epoch % args.log_iter == 0:
+    #     logger.log_tqdm(pbar)
+    #     logger.log_scalars(epoch)
+    #     logger.loss_reset()
 
-    ### VALIDATION
-    if epoch % args.val_iter == 0:
-        model.eval()
-        logger.evaluator.reset()
-        with torch.no_grad():
-            for batch in val_loader:
-                val_x, val_y, _ = batch
-                val_x, val_y = val_x.to(device), val_y.to(device)
+    # ### VALIDATION
+    # if epoch % args.val_iter == 0:
+    #     model.eval()
+    #     logger.evaluator.reset()
+    #     with torch.no_grad():
+    #         for batch in val_loader:
+    #             val_x, val_y, _ = batch
+    #             val_x, val_y = val_x.to(device), val_y.to(device)
 
-                encoded = model(val_x)
-                loss = get_contrastive_loss(args, encoded, val_y, device)
-                logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
+    #             encoded = model(val_x)
+    #             loss = get_contrastive_loss(args, encoded, val_y, device)
+    #             logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
 
-            logger.add_validation_logs(epoch, loss)
-        model.train()
-    logger.save(model, optimizer, epoch)
-    pbar.update(1)
+    #         logger.add_validation_logs(epoch, loss)
+    #     model.train()
+    # logger.save(model, optimizer, epoch)
+    # pbar.update(1)
+
+model.eval()
+for epoch in range(1, args.epochs + 1):
+    pred_class = classifier(train_x)
+    loss(pred_class, train_y)
+
 
 ckpt = logger.save(model, optimizer, epoch, last=True)
 logger.writer.close()
