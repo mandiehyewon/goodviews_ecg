@@ -1,3 +1,6 @@
+import numpy as np
+import torch
+
 ### augment_type ###
 # 1: time shift
 # 2: masking
@@ -10,20 +13,22 @@ def augment(args, augment_type, x):
 
     time_mask_para = time_axis_length / 150     
     if augment_type == 1:  
-        t_shift = int(np.random.uniform(low=args.time_shift_min, high=args.time_shift_max))
+        t_shift = int(np.random.uniform(low=args.tshift_min, high=args.tshift_max))
         for lead in range(leads):
             if t_shift >= 0:
+                print (x[lead, t_shift:].size(), torch.zeros(t_shift).size())
                 x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros(t_shift)], dim=0)
             else:
                 x[lead, :] = torch.cat([torch.zeros(t_shift), x[lead, :t_shift]], dim=0)
             
     elif augment_type == 2:    
         for lead in range(leads):
-            t_zero_masking = int(np.random.uniform(low=args.mask_min, high=mask_max))
+            t_zero_masking = int(np.random.uniform(low=args.mask_min, high=args.mask_max))
             t_zero_masking_start = int(np.random.uniform(low=0, high=time_axis_length-t_zero_masking-1))
             x[lead, t_zero_masking_start:t_zero_masking_start+t_zero_masking] = 0
 
     elif augment_type == 3:    
+        
         for lead in range(leads):
             amp_scale = round(float(np.random.uniform(low=args.amplitude_min, high=args.amplitude_max)),5)
             x[lead, :] = torch.mul(x[lead, :], amp_scale)

@@ -1,4 +1,5 @@
 import os
+import random
 import numpy as np
 import pandas as pd
 
@@ -13,10 +14,11 @@ from .augment import augment
 
 class ECGDataset(Dataset):
     def __init__(self, args, df):  # , augment=False):
-        self.label = args.label
-        self.dir_csv = args.dir_csv
+        self.args = args
+        self.label = self.args.label
+        self.dir_csv = self.args.dir_csv
         self.df = df
-        self.viewtype = args.viewtype
+        self.viewtype = self.args.viewtype
 
     def __len__(self):
         return len(self.df)
@@ -38,13 +40,14 @@ class ECGDataset(Dataset):
             group = row["y"]
         elif self.viewtype == 'simclr':
             group = random.randint(1,3)
+            print(type(x))
             x = augment(self.args, group, x)
 
         return x.T, y, group, fname
 
 def normalize_frame(frame):
     if isinstance(frame, np.ndarray):
-        frame = (frame - np.min(frame)) / (np.max(frame) - np.min(frame) + 1e-8)
+        frame = torch.from_numpy((frame - np.min(frame)) / (np.max(frame) - np.min(frame) + 1e-8))
     elif isinstance(frame, torch.Tensor):
         frame = (frame - torch.min(frame)) / (
             torch.max(frame) - torch.min(frame) + 1e-8
