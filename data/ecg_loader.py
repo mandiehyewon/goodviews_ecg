@@ -34,6 +34,8 @@ class ECGDataset(Dataset):
 
         if self.viewtype == 'demos':
             group = row["group"]
+        elif self.viewtype == 'rhythm':
+            group = row["y"]
         elif self.viewtype == 'simclr':
             group = random.randint(1,3)
             x = augment(self.args, group, x)
