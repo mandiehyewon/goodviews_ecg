@@ -4,33 +4,38 @@
 # 3: amplitude scale
 
 
-def augment(args, augment_type, features):
-    feature = features[0]
-    channel_num = feature.size(0) #12
-    time_axis_length = feature.size(1)
+def augment(args, augment_type, x):
+    leads = x.size(0) #12
+    time_axis_length = x.size(1)
 
     time_mask_para = time_axis_length / 150     
     if augment_type == 1:  
-        t_shift = int(np.random.uniform(low=args.time_shift_min, high=args.time_shift_max))  
-        for ch in range(channel_num):
+        t_shift = int(np.random.uniform(low=args.time_shift_min, high=args.time_shift_max))
+        for lead in range(leads):
             if t_shift >= 0:
-                feature[ch, :] = torch.cat([feature[ch, t_shift:], torch.zeros(t_shift)], dim=0)
+                x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros(t_shift)], dim=0)
             else:
-                feature[ch, :] = torch.cat([torch.zeros(t_shift), feature[ch, :t_shift]], dim=0)
+                x[lead, :] = torch.cat([torch.zeros(t_shift), x[lead, :t_shift]], dim=0)
             
     elif augment_type == 2:    
-        for ch in range(channel_num):
-            t_zero_masking = int(np.random.uniform(low=args.zero_masking_min, high=args.zero_masking_max))
+        for lead in range(leads):
+            t_zero_masking = int(np.random.uniform(low=args.mask_min, high=mask_max))
             t_zero_masking_start = int(np.random.uniform(low=0, high=time_axis_length-t_zero_masking-1))
-            feature[ch, t_zero_masking_start:t_zero_masking_start+t_zero_masking] = 0
+            x[lead, t_zero_masking_start:t_zero_masking_start+t_zero_masking] = 0
 
     elif augment_type == 3:    
-        for ch in range(channel_num):
+        for lead in range(leads):
             amp_scale = round(float(np.random.uniform(low=args.amplitude_min, high=args.amplitude_max)),5)
-            feature[ch, :] = torch.mul(feature[ch, :], amp_scale)
+            x[lead, :] = torch.mul(x[lead, :], amp_scale)
+
+    elif augment_type == 4:    
+        for lead in range(leads):
+            gs_noise_factor = float(torch.random.uniform(low=args.noise_min, high=args.noise_max))
+            gs_noise = torch.normal(mean=gs_noise_factor, std=0.01, size=torch.size(x[lead, :]))
+            x[lead, :] = torch.add(x[lead, :], gs_noise)
 
     else:
         print("Error! select correct augmentation type")
         exit(1)
     
-    return (feature, features[1], features[2])
+    return x
