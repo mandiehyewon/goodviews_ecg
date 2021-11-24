@@ -6,6 +6,8 @@ from torch.utils.data import DataLoader
 from config import args
 from .ecg_loader import ECGDataset, normalize_frame
 
+from sklearn.cluster import KMeans
+
 
 def get_data(args):
     df_tab = pd.read_excel(os.path.join(args.dir_csv, "Diagnostics.xlsx"))
@@ -27,6 +29,13 @@ def get_data(args):
         df_tab["group"] = pd.Categorical(df_tab.age_bucket.astype(str) + df_tab.Gender.astype(str)).codes
     elif args.viewtype=="rhythm":
         df_tab["group"] = df_tab.copy().y
+    elif args.viewtype == 'attr':
+        attrs = ["VentricularRate", "AtrialRate", "QRSDuration", "QTInterval", "QTCorrected", "RAxis", "TAxis",
+                 "QRSCount", "QOnset", "QOffset", "TOffset"]
+        df_attrs = df_tab[attrs]
+        normalized_df_attrs = (df_attrs - df_attrs.mean()) / df_attrs.std()
+        labels = KMeans(n_clusters=args.num_kmeans_clusters).fit(normalized_df_attrs)
+        df_tab["group"] = labels
 
     train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
     val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
