@@ -37,16 +37,14 @@ class ECGDataset(Dataset):
         y = row["y"]
         x = normalize_frame(x)
 
-        if self.viewtype == 'demos':
+        if self.viewtype in ['demos', 'attr']:
             group = row["group"]
         elif self.viewtype == 'rhythm':
             group = row["y"]
         elif self.viewtype == 'simclr':
-            group = random.randint(1,3)
+            group = row["group"]
             print(type(x))
             x = augment(self.args, group, x)
-        elif self.viewtype == 'attr':
-            group = row["group"]
 
         return x.T, y, group, fname
 

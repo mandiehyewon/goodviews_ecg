@@ -29,6 +29,8 @@ def get_data(args):
         df_tab["group"] = pd.Categorical(df_tab.age_bucket.astype(str) + df_tab.Gender.astype(str)).codes
     elif args.viewtype=="rhythm":
         df_tab["group"] = df_tab.copy().y
+    elif args.viewtype == "simclr":
+        df_tab["group"] == random.randint(1,3)
     elif args.viewtype == 'attr':
         attrs = ["VentricularRate", "AtrialRate", "QRSDuration", "QTInterval", "QTCorrected", "RAxis", "TAxis",
                  "QRSCount", "QOnset", "QOffset", "TOffset"]
