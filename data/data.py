@@ -34,9 +34,10 @@ def get_data(args):
                  "QRSCount", "QOnset", "QOffset", "TOffset"]
         df_attrs = df_tab[attrs]
         normalized_df_attrs = (df_attrs - df_attrs.mean()) / df_attrs.std()
-        labels = KMeans(n_clusters=args.num_kmeans_clusters).fit(normalized_df_attrs)
-        df_tab["group"] = labels
-
+        kmeans = KMeans(n_clusters=args.num_kmeans_clusters)
+        fit = kmeans.fit(normalized_df_attrs)
+        df_tab["group"] = fit.labels_
+        pass
     train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
     val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
     test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
@@ -50,19 +51,19 @@ def get_data(args):
         ECGDataset(args, train_df),
         batch_size=args.batch_size,
         shuffle=True,
-        num_workers=2,
+        num_workers=0,
     )
     val_loader = DataLoader(
         ECGDataset(args, val_df),
         batch_size=args.batch_size,
         shuffle=True,
-        num_workers=2,
+        num_workers=0,
     )
     test_loader = DataLoader(
         ECGDataset(args, test_df),
         batch_size=args.batch_size,
         shuffle=False,
-        num_workers=2,
+        num_workers=0,
     )
 
     return train_loader, val_loader, test_loader

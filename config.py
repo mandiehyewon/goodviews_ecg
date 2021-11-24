@@ -46,6 +46,7 @@ parser.add_argument('--mask-max', type=int, default=150)
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
 parser.add_argument("--viewtype", type=str, default="demos", choices=["demos", "rhythm", "clocs", "simclr", "similarity"])
+parser.add_argument("--num-kmeans-clusters", type=int, default=40)
 
 # Architecture Parameters
 parser.add_argument("--num-layers", type=int, default=2)

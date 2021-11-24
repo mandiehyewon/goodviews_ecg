@@ -9,7 +9,10 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
+from sklearn.cluster import KMeans
+
 from .augment import augment
+
 
 
 class ECGDataset(Dataset):
@@ -42,6 +45,8 @@ class ECGDataset(Dataset):
             group = random.randint(1,3)
             print(type(x))
             x = augment(self.args, group, x)
+        elif self.viewtype == 'attr':
+            group = row["group"]
 
         return x.T, y, group, fname
 
