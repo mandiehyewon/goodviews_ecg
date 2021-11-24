@@ -90,7 +90,7 @@ for epoch in range(1, dw_epochs + 1):
         train_x = train_x.to(device)
 
         dw_pred = classifier(model(train_x))
-        dw_loss = dw_criterion(dw_pred, train_y.to(torch.long))
+        dw_loss = dw_criterion(dw_pred, train_y.to(torch.long).to(device))
         
         print(f"downstream_loss:{dw_loss}")
         
@@ -111,7 +111,7 @@ with torch.no_grad():
         test_x, test_y, test_group, test_fnames = test_batch
         test_x = test_x.to(device)
         test_pred = classifier(model(test_x))
-        y_pred.append(test_pred)
+        y_pred.append(test_pred.cpu())
         y_target.append(test_y)
 
     y_pred = torch.cat(y_pred, dim=0).numpy()
