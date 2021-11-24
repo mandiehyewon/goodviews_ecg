@@ -17,11 +17,11 @@ def augment(args, augment_type, x):
         for lead in range(leads):
             if t_shift >= 0:
                 print ("---------------")
-                print (t_shift, x[lead, t_shift:].size(), torch.zeros(t_shift).size())
+                print (t_shift, x[lead, t_shift:].size(), torch.zeros((lead, t_shift)).size())
                 print ("---------------")
-                x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros(t_shift)], dim=0)
+                x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros((lead, t_shift))], dim=0)
             else:
-                x[lead, :] = torch.cat([torch.zeros(t_shift), x[lead, :t_shift]], dim=0)
+                x[lead, :] = torch.cat([torch.zeros((lead, t_shift)), x[lead, :t_shift]], dim=0)
             
     elif augment_type == 2:    
         for lead in range(leads):
