@@ -31,7 +31,7 @@ def get_data(args):
     elif args.viewtype=="rhythm":
         df_tab["group"] = df_tab.copy().y
     elif args.viewtype == "simclr":
-        df_tab["group"] = random.randint(1,3)
+        pass # we handle df_tab['group'] in ecg_loader.py for the case of simclr
     elif args.viewtype == 'attr':
         attrs = ["VentricularRate", "AtrialRate", "QRSDuration", "QTInterval", "QTCorrected", "RAxis", "TAxis",
                  "QRSCount", "QOnset", "QOffset", "TOffset"]
