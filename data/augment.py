@@ -16,7 +16,9 @@ def augment(args, augment_type, x):
         t_shift = int(np.random.uniform(low=args.tshift_min, high=args.tshift_max))
         for lead in range(leads):
             if t_shift >= 0:
-                print (x[lead, t_shift:].size(), torch.zeros(t_shift).size())
+                print ("---------------")
+                print (t_shift, x[lead, t_shift:].size(), torch.zeros(t_shift).size())
+                print ("---------------")
                 x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros(t_shift)], dim=0)
             else:
                 x[lead, :] = torch.cat([torch.zeros(t_shift), x[lead, :t_shift]], dim=0)
@@ -30,7 +32,7 @@ def augment(args, augment_type, x):
     elif augment_type == 3:    
         
         for lead in range(leads):
-            amp_scale = round(float(np.random.uniform(low=args.amplitude_min, high=args.amplitude_max)),5)
+            amp_scale = round(float(np.random.uniform(low=args.amp_min, high=args.amp_max)),5)
             x[lead, :] = torch.mul(x[lead, :], amp_scale)
 
     elif augment_type == 4:    

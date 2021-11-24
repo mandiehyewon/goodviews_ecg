@@ -48,32 +48,15 @@ for epoch in range(1, args.epochs + 1):
         # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
 
-    # ## LOGGING
-    # if epoch % args.log_iter == 0:
-    #     logger.log_tqdm(pbar)
-    #     logger.log_scalars(epoch)
-    #     logger.loss_reset()
+    ## LOGGING
+    logger.log_tqdm(pbar)
+    logger.log_scalars(epoch)
+    logger.loss_reset()
+    logger.save(model, optimizer, epoch)
+    pbar.update(1)
 
-    # ### VALIDATION
-    # if epoch % args.val_iter == 0:
-    #     model.eval()
-    #     logger.evaluator.reset()
-    #     with torch.no_grad():
-    #         for batch in val_loader:
-    #             val_x, val_y, _ = batch
-    #             val_x, val_y = val_x.to(device), val_y.to(device)
-
-    #             encoded = model(val_x)
-    #             loss = get_contrastive_loss(args, encoded, val_y, device)
-    #             logger.evaluator.add_batch(val_y.cpu(), encoded.cpu(), loss)
-
-    #         logger.add_validation_logs(epoch, loss)
-    #     model.train()
-    # logger.save(model, optimizer, epoch)
-    # pbar.update(1)
-
-# ckpt = logger.save(model, optimizer, epoch, last=True)
-# logger.writer.close()
+ckpt = logger.save(model, optimizer, epoch, last=True)
+logger.writer.close()
 
 # Downstream Training
 model.eval()
