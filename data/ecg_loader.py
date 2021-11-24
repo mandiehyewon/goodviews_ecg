@@ -43,7 +43,6 @@ class ECGDataset(Dataset):
             group = row["y"]
         elif self.viewtype == 'simclr':
             group = row["group"]
-            print(type(x))
             x = augment(self.args, group, x)
 
         return x.T, y, group, fname

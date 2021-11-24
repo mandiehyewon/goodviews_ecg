@@ -29,8 +29,7 @@ def augment(args, augment_type, x):
             t_zero_masking_start = int(np.random.uniform(low=0, high=time_axis_length-t_zero_masking-1))
             x[lead, t_zero_masking_start:t_zero_masking_start+t_zero_masking] = 0
 
-    elif augment_type == 3:    
-        
+    elif augment_type == 3:
         for lead in range(leads):
             amp_scale = round(float(np.random.uniform(low=args.amp_min, high=args.amp_max)),5)
             x[lead, :] = torch.mul(x[lead, :], amp_scale)
