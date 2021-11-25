@@ -16,8 +16,10 @@ parser.add_argument("--seed", type=int, default=926)
 # Training Parameters
 parser.add_argument("--dim", type=int, default=100)
 parser.add_argument("--epochs", type=int, default=300)
+parser.add_argument("--dw-epochs", type=int, default=10)
 parser.add_argument("--batch-size", type=int, default=64)
-parser.add_argument("--lr", type=float, default=1e-4)
+parser.add_argument("--lr", type=float, default=1e-2)
+parser.add_argument("--dw-lr", type=float, default=1e-4)
 parser.add_argument("--scheduler", type=str, default="poly", choices=["poly", "cos"])
 parser.add_argument('--lr-sch-start', type=int, default=0)
 parser.add_argument('--warmup-iters', type=int, default=0)
@@ -58,12 +60,7 @@ parser.add_argument("--eps", type=float, default=1e-6)  # eps for RMSE
 
 # Logging Parameters
 parser.add_argument("--log-iter", type=int, default=10)
-parser.add_argument("--val-iter", type=int, default=10)
-parser.add_argument("--save-iter", type=int, default=100)
 
-# Test / Store Parameters
-parser.add_argument("--best", default=True, action="store_true")
-parser.add_argument("--last", default=False, action="store_true")
 args = parser.parse_args()
 
 # Dataset Path settings

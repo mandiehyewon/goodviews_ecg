@@ -48,7 +48,7 @@ def get_data(args):
     train_df = df_tab[df_tab["FileName"].isin(train_ids)]
     val_df = df_tab[df_tab["FileName"].isin(val_ids)]
     test_df = df_tab[df_tab["FileName"].isin(test_ids)]
-    print(len(train_df), len(val_df), len(test_df))
+#     print(len(train_df), len(val_df), len(test_df))s
 
     train_loader = DataLoader(
         ECGDataset(args, train_df),

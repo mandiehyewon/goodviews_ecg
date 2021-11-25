@@ -47,15 +47,11 @@ class Logger:
         
         # Log variables
         self.loss = 0
-        self.best_auc = 0
-        self.best_iter = 0
-        self.best_results = []
-        self.best_loss = 0
 
         # print(self.args_save)
 
     def log_tqdm(self, pbar):
-        tqdm_log = 'loss: {:.5f}, auc: {:.5f}, best_iter: {}'.format(self.loss/self.log_iter, self.best_auc, self.best_iter)
+        tqdm_log = 'loss: {:.5f}'.format(self.loss/self.log_iter)
         pbar.set_description(tqdm_log)
         
     def log_scalars(self, step):
@@ -63,41 +59,11 @@ class Logger:
 
     def loss_reset(self):
         self.loss = 0
-
-    def add_validation_logs(self, step, loss):
-
-        if self.args.train_mode == 'regression':
-            # loss = self.evaluator.performance_metric()
-            if self.best_loss == 0.0:
-                self.best_loss = loss
-                self.best_iter = step
-            else:
-                if self.best_loss > loss:
-                    self.best_loss = loss
-                    self.best_iter = step
-            self.writer.add_scalar('val/loss', loss, global_step=step)
-            self.best_results = [loss]
-
-        else:
-            auc = self.evaluator.performance_metric()
-            if self.best_auc < auc:
-                self.best_iter = step
-                self.best_auc = auc
-                self.best_results = [auc]
-
-            self.writer.add_scalar('val/auroc', auc, global_step=step)
-            self.writer.flush()
-
+        
     def save(self, model, optimizer, step, last=None, k_fold_num=0):
-        ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'best_results': self.best_results, 'best_step': step, 'last_step' : last}
-
-        if step == self.best_iter:
-            self.save_ckpt(ckpt, 'best.pth')
-        if last:
-            self.save_ckpt(ckpt, 'last.pth')
-        elif step % self.args.save_iter == 0:
-            self.save_ckpt(ckpt, '{}.pth'.format(step))
-
+        ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'last_step' : last}
+        self.save_ckpt(ckpt, 'model.pth')
+        
         return ckpt
 
     def save_ckpt(self, ckpt, name):

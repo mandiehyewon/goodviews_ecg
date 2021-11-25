@@ -34,24 +34,27 @@ scheduler = LR_Scheduler(optimizer, args.scheduler, args.lr, args.epochs, from_i
 pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
 for epoch in range(1, args.epochs + 1):
     loss = 0
-    for train_batch in train_loader:
+    for (idx, train_batch) in enumerate(train_loader):
         train_x, train_y, train_group, train_fnames = train_batch
         train_x, train_group = train_x.to(device), train_group.to(device)
         encoded = model(train_x)
 
         loss = get_contrastive_loss(args, encoded, train_group, device)
-        print(loss)
+#         print(loss)
         logger.loss += loss.item()
 
         optimizer.zero_grad()
         loss.backward()
         # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
+        
+        if idx % args.log_iter == 0:        
+            logger.log_tqdm(pbar)
+            logger.log_scalars(epoch*len(train_loader)+idx)
+            logger.loss_reset()
 
     ## LOGGING
-    logger.log_tqdm(pbar)
-    logger.log_scalars(epoch)
-    logger.loss_reset()
+
     logger.save(model, optimizer, epoch)
     pbar.update(1)
 
@@ -60,29 +63,34 @@ logger.writer.close()
 
 # Downstream Training
 model.eval()
-dw_learning_rate = 1e-2
-dw_epochs = 10
 dw_criterion = nn.CrossEntropyLoss()
-dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=dw_learning_rate)
+dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=args.dw_lr)
 
-for epoch in range(1, dw_epochs + 1):
+pbar = tqdm(total=args.dw_epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
+for epoch in range(1, args.dw_epochs + 1):
     loss = 0
     classifier.train()
+    
     for train_batch in train_loader:
         train_x, train_y, train_group, train_fnames = train_batch
         train_x = train_x.to(device)
 
         dw_pred = classifier(model(train_x))
         dw_loss = dw_criterion(dw_pred, train_y.to(torch.long).to(device))
+        loss += dw_loss
         
-        print(f"downstream_loss:{dw_loss}")
+#         print(f"downstream_loss:{dw_loss}")
         
         dw_optimizer.zero_grad()
         dw_loss.backward()
         dw_optimizer.step()
+        
+        if idx % args.log_iter == 0: 
+            tqdm_log = 'downstream_loss: {:.5f}'.format(loss/args.log_iter)
+            loss = 0
+            pbar.set_description(tqdm_log)
 
 print("\n Finished training..........Starting Test")
-
 
 with torch.no_grad():
     model.eval()
