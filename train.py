@@ -89,6 +89,7 @@ for epoch in range(1, args.dw_epochs + 1):
             tqdm_log = 'downstream_loss: {:.5f}'.format(loss/args.log_iter)
             loss = 0
             pbar.set_description(tqdm_log)
+    pbar.update(1)
 
 print("\n Finished training..........Starting Test")
 
