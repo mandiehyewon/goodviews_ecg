@@ -36,6 +36,8 @@ parser.add_argument("--normalize", default=False, action="store_true")
 parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
 # Augmentation Parameters
+parser.add_argument('--use-preaug', type=bool, default=False, help='use data that is priorly augmented')
+parser.add_argument('--num-augments', type=int, default=4, help='number of types of augments to use')
 parser.add_argument('--amp-min', type=float, default=0.5)
 parser.add_argument('--amp-max', type=int, default=2)
 parser.add_argument('--tshift-min', type=int, default=-50, help='number of samples')
@@ -71,6 +73,7 @@ with open("path_configs.yaml") as f:
     path_configs = yaml.safe_load(f)
     args.dir_csv = path_configs["dir_csv"]
     args.dir_result = path_configs["dir_result"]
+    args.preaug_fname = path_configs["preaug_fname"]
 
 # Device Settings
 if args.device is not None:
