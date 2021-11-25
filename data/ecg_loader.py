@@ -4,15 +4,7 @@ import numpy as np
 import pandas as pd
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
-
-from sklearn.cluster import KMeans
-
-from .augment import augment
-
 
 
 class ECGDataset(Dataset):
@@ -28,25 +20,27 @@ class ECGDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        # load ECG
-        file = row["FileName"]
-        fname = os.path.join(self.dir_csv, "ECGDataDenoised", f"{file}.csv")
 
-        x = pd.read_csv(fname, header=None).values.astype(np.float32)
+        if self.viewtype != 'simclr': # simclr's row already includes x values in augmented format.
+            # load ECG
+            file = row["FileName"]
+            fname = os.path.join(self.dir_csv, "ECGDataDenoised", f"{file}.csv")
+            x = pd.read_csv(fname, header=None).values.astype(np.float32)
+            x = normalize_frame(x)
 
         y = row["y"]
-        x = normalize_frame(x)
 
         if self.viewtype in ['demos', 'attr']:
             group = row["group"]
         elif self.viewtype == 'rhythm':
             group = row["y"]
         elif self.viewtype == 'simclr':
-            group = row["group"]
-            print(type(x))
-            x = augment(self.args, group, x)
+            x = row["x"]
+            x = normalize_frame(x)
+            group = row["group"]  # simclr already given 1 and 0 as a group. 1 is for pos samples, 0 for neg samples.
 
         return x.T, y, group, fname
+
 
 def normalize_frame(frame):
     if isinstance(frame, np.ndarray):

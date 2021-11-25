@@ -1,48 +1,36 @@
-import numpy as np
-import torch
+import pandas as pd
 
-### augment_type ###
-# 1: time shift
-# 2: masking
-# 3: amplitude scale
+import utils.augmentation as aug
+
+from config import args
 
 
-def augment(args, augment_type, x):
-    leads = x.size(0) #12
-    time_axis_length = x.size(1)
+def replicates_row(row, num_augments):
+    return pd.concat([row] * num_augments, axis=1)
 
-    time_mask_para = time_axis_length / 150     
-    if augment_type == 1:  
-        t_shift = int(np.random.uniform(low=args.tshift_min, high=args.tshift_max))
-        for lead in range(leads):
-            if t_shift >= 0:
-                print ("---------------")
-                print (t_shift, x[lead, t_shift:].size(), torch.zeros((lead, t_shift)).size())
-                print ("---------------")
-                x[lead, :] = torch.cat([x[lead, t_shift:], torch.zeros((lead, t_shift))], dim=0)
-            else:
-                x[lead, :] = torch.cat([torch.zeros((lead, t_shift)), x[lead, :t_shift]], dim=0)
-            
-    elif augment_type == 2:    
-        for lead in range(leads):
-            t_zero_masking = int(np.random.uniform(low=args.mask_min, high=args.mask_max))
-            t_zero_masking_start = int(np.random.uniform(low=0, high=time_axis_length-t_zero_masking-1))
-            x[lead, t_zero_masking_start:t_zero_masking_start+t_zero_masking] = 0
 
-    elif augment_type == 3:    
-        
-        for lead in range(leads):
-            amp_scale = round(float(np.random.uniform(low=args.amp_min, high=args.amp_max)),5)
-            x[lead, :] = torch.mul(x[lead, :], amp_scale)
+def make_batch(row, df_tab, num_augments):
+    pos_sample_idx = [i for i in range(row.name, row.name + num_augments)]
+    pos_samples = df_tab.iloc[pos_sample_idx, :]
+    pos_samples['group'] = 1
+    neg_samples_population = df_tab.drop(pos_sample_idx)
+    neg_samples = neg_samples_population.sample(n=args.batch_size - args.num_augments)
+    neg_samples['group'] = 0
+    batch = pd.concat([pos_samples, neg_samples],  ignore_index=True)
+    batch = batch.sample(frac=1)
+    return batch
 
-    elif augment_type == 4:    
-        for lead in range(leads):
-            gs_noise_factor = float(torch.random.uniform(low=args.noise_min, high=args.noise_max))
-            gs_noise = torch.normal(mean=gs_noise_factor, std=0.01, size=torch.size(x[lead, :]))
-            x[lead, :] = torch.add(x[lead, :], gs_noise)
 
-    else:
-        print("Error! select correct augmentation type")
-        exit(1)
-    
+def augment(augment_type, x):
+    """
+    https://github.com/uchidalab/time_series_augmentation/blob/master/docs/AugmentationMethods.md
+    """
+    if augment_type == 0:
+        x = aug.jitter(x, sigma=0.03)
+    elif augment_type == 1:  # shifting
+        x = aug.scaling(x, sigma=0.1)
+    elif augment_type == 2:  # shifting
+        x = aug.rotation(x)  # flipping as well as axis shuffling.
+    elif augment_type == 3:  # shifting
+        x = aug.time_warp(x, sigma=0.2, knot=4)  # "Data augmentation of wearable sensor data for parkinson’s disease monitoring using convolutional neural networks," in ACM ICMI, pp. 216-220, 2017.
     return x
