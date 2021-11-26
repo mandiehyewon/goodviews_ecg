@@ -36,7 +36,7 @@ parser.add_argument("--normalize", default=False, action="store_true")
 parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
 # Augmentation Parameters
-parser.add_argument('--use-preaug', type=bool, default=False, help='use data that is priorly augmented')
+parser.add_argument('--use-preaug', type=bool, default=True, help='use data that is priorly augmented')
 parser.add_argument('--num-augments', type=int, default=4, help='number of types of augments to use')
 parser.add_argument('--amp-min', type=float, default=0.5)
 parser.add_argument('--amp-max', type=int, default=2)
@@ -47,7 +47,7 @@ parser.add_argument('--mask-max', type=int, default=150)
 
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
-parser.add_argument("--viewtype", type=str, default="demos", choices=["demos", "rhythm", "clocs", "simclr", "similarity", "attr"])
+parser.add_argument("--viewtype", type=str, default="simclr", choices=["demos", "rhythm", "clocs", "simclr", "attr"])
 parser.add_argument("--num-kmeans-clusters", type=int, default=40)
 
 # Architecture Parameters

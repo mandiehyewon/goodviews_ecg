@@ -55,7 +55,6 @@ def get_data(args):
         if args.use_preaug:
             with open(os.path.join(args.dir_csv, args.preaug_fname), "rb") as f:
                 df_tab = pickle.load(f)
-                print("hi")
         else:
             df_tab = pd.concat(
                 [replicates_row(row, args.num_augments) for _, row in df_tab.iterrows()],
@@ -137,7 +136,7 @@ def get_data(args):
         train_loader = DataLoader(
             ECGDataset(args, train_df),
             batch_size=args.batch_size,
-            shuffle=False,
+            shuffle=False, # we shuffled already. if we shuffle here, our batchwise pos-neg samples crash.
             num_workers=0,
         )
 

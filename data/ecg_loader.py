@@ -35,7 +35,11 @@ class ECGDataset(Dataset):
         elif self.viewtype == 'rhythm':
             group = row["y"]
         elif self.viewtype == 'simclr':
+            file = row["FileName"]
+            fname = os.path.join(self.dir_csv, "ECGDataDenoised", f"{file}.csv")
+
             x = row["x"]
+            x = x.astype(np.float32)
             x = normalize_frame(x)
             group = row["group"]  # simclr already given 1 and 0 as a group. 1 is for pos samples, 0 for neg samples.
 
