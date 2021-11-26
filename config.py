@@ -38,7 +38,7 @@ parser.add_argument("--normalize", default=False, action="store_true")
 parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
 # Augmentation Parameters
-parser.add_argument('--use-preaug', type=bool, default=True, help='use data that is priorly augmented')
+parser.add_argument('--no-preaug', action="store_false", help='do not use priorly augmented data')
 parser.add_argument('--num-augments', type=int, default=4, help='number of types of augments to use')
 parser.add_argument('--amp-min', type=float, default=0.5)
 parser.add_argument('--amp-max', type=int, default=2)

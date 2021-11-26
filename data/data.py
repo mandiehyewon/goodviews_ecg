@@ -52,7 +52,7 @@ def get_data(args):
     elif args.viewtype == "simclr":
         df_tab = df_tab.sample(frac=1)
 
-        if args.use_preaug:
+        if ~args.no_preaug:
             with open(os.path.join(args.dir_csv, args.preaug_fname), "rb") as f:
                 df_tab = pickle.load(f)
         else:
