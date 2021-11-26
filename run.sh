@@ -1,0 +1,1 @@
+python train.py --viewtype simclr # to run simclr
