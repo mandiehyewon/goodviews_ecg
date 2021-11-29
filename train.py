@@ -61,6 +61,8 @@ for epoch in range(1, args.epochs + 1):
             logger.log_tqdm(pbar)
             logger.log_scalars(epoch*len(train_loader)+idx)
             logger.loss_reset()
+    if epoch in [20, 50, 100, 200]:
+        logger.save(model, optimizer, epoch)
 
     ## LOGGING
 

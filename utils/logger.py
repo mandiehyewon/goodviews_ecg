@@ -61,9 +61,13 @@ class Logger:
         self.loss = 0
         
     def save(self, model, optimizer, step, last=None, k_fold_num=0):
-        ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'last_step' : last}
-        self.save_ckpt(ckpt, 'model.pth')
-        
+        if last:
+            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'last_step' : last}
+            self.save_ckpt(ckpt, 'model.pth')
+        else:
+            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict()}
+            self.save_ckpt(ckpt, 'model_'+str(step)+'epc.pth')
+            
         return ckpt
 
     def save_ckpt(self, ckpt, name):
