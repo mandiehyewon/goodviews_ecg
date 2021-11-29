@@ -12,7 +12,10 @@ def get_model(args, device=None):
         pass
 
     if args.model == "contrastive":
-        model = resnet18_contrastive(embed_size = args.embed_size)
+        if args.viewtype == 'clocslead':
+            model = resnet18_contrastive(embed_size = args.embed_size, nleads=6)
+        else:
+            model = resnet18_contrastive(embed_size = args.embed_size)
         pass
 
     else:

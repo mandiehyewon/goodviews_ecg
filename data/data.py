@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 
 from sklearn.cluster import KMeans
 
-from .ecg_loader import ECGDataset, normalize_frame
+from .ecg_loader import ECGDataset, normalize_frame, CLOCSDataset
 from .augment import augment
 from .augment import replicates_row, make_batch
 
@@ -150,6 +150,28 @@ def get_data(args):
         test_loader = DataLoader(
             ECGDataset(args, test_df),
             batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=0,
+        )
+
+    elif args.viewtype in ['clocstime', 'clocslead']:
+        train_loader = DataLoader(
+            CLOCSDataset(args, train_df),
+            batch_size=int(args.batch_size/2),
+            shuffle=True,
+            num_workers=0,
+        )
+
+        val_loader = DataLoader(
+            CLOCSDataset(args, val_df),
+            batch_size=int(args.batch_size/2),
+            shuffle=True,
+            num_workers=0,
+        )
+
+        test_loader = DataLoader(
+            CLOCSDataset(args, test_df),
+            batch_size=int(args.batch_size/2),
             shuffle=False,
             num_workers=0,
         )

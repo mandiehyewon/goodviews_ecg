@@ -35,7 +35,16 @@ pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}
 for epoch in range(1, args.epochs + 1):
     loss = 0
     for (idx, train_batch) in enumerate(train_loader):
-        train_x, train_y, train_group, train_fnames = train_batch
+        if args.viewtype in ['clocstime', 'clocslead']:
+            train_x1, train_x2, train_y, train_group, train_fnames = train_batch
+
+            train_x = torch.cat((train_x1, train_x2),dim=0)
+            train_y = torch.cat((train_y, train_y),dim=0)
+            train_group = torch.cat((train_group, train_group),dim=0)
+
+        else:
+            train_x, train_y, train_group, train_fnames = train_batch
+
         train_x, train_group = train_x.to(device), train_group.to(device)
         encoded = model(train_x)
 
@@ -58,8 +67,9 @@ for epoch in range(1, args.epochs + 1):
     logger.save(model, optimizer, epoch)
     pbar.update(1)
 
-ckpt = logger.save(model, optimizer, epoch, last=True)
-logger.writer.close()
+if args.epochs > 0:
+    ckpt = logger.save(model, optimizer, epoch, last=True)
+    logger.writer.close()
 
 # Downstream Training
 model.eval()
@@ -71,8 +81,17 @@ for epoch in range(1, args.dw_epochs + 1):
     loss = 0
     classifier.train()
     
-    for train_batch in train_loader:
-        train_x, train_y, train_group, train_fnames = train_batch
+    for (idx, train_batch) in enumerate(train_loader):
+        if args.viewtype in ['clocstime', 'clocslead']:
+            train_x1, train_x2, train_y, train_group, train_fnames = train_batch
+
+            train_x = torch.cat((train_x1, train_x2),dim=0)
+            train_y = torch.cat((train_y, train_y),dim=0)
+            train_group = torch.cat((train_group, train_group),dim=0)
+
+        else:
+            train_x, train_y, train_group, train_fnames = train_batch
+        
         train_x = train_x.to(device)
 
         dw_pred = classifier(model(train_x))
@@ -100,7 +119,16 @@ with torch.no_grad():
     y_target = []
 
     for (i,test_batch) in enumerate(test_loader):
-        test_x, test_y, test_group, test_fnames = test_batch
+        if args.viewtype in ['clocstime', 'clocslead']:
+            test_x1, test_x2, test_y, test_group, test_fnames = test_batch
+
+            test_x = torch.cat((test_x1, test_x2),dim=0)
+            test_y = torch.cat((test_y, test_y),dim=0)
+            test_group = torch.cat((test_group, test_group),dim=0)
+
+        else:
+            test_x, test_y, test_group, test_fnames = test_batch
+        
         test_x = test_x.to(device)
         test_pred = classifier(model(test_x))
         y_pred.append(test_pred.cpu())

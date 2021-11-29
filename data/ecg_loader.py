@@ -54,3 +54,44 @@ def normalize_frame(frame):
             torch.max(frame) - torch.min(frame) + 1e-8
         )
     return frame
+
+
+class CLOCSDataset(Dataset):
+    def __init__(self, args, df):  # , augment=False):
+        self.args = args
+        self.label = self.args.label
+        self.dir_csv = self.args.dir_csv
+        self.df = df
+        self.viewtype = self.args.viewtype
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+        row = self.df.iloc[idx]
+        y = row["y"]
+        group = idx
+
+        file = row["FileName"]
+        fname = os.path.join(self.dir_csv, "ECGDataDenoised", f"{file}.csv")
+        x = pd.read_csv(fname, header=None).values.astype(np.float32)
+        x = normalize_frame(x)
+
+        if self.viewtype == 'clocstime':
+            half = int(x.size(0)/2)
+            x1 = x[:half]
+            x2 = x[half:]
+
+        elif self.viewtype == 'clocslead':
+            half = int(x.size(1)/2)
+            x1 = x[:,:half]
+            x2 = x[:,half:]
+
+        return x1.T, x2.T, y, group, fname
+
+
+
+
+
+
+
