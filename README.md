@@ -8,6 +8,4 @@ pytorch == 1.10.0
 ```
 
 ## Self-Supervised Model Trainnig
-```
-python train.py --model contrastive
-```
+For example runs, please refer to runs folder. 
