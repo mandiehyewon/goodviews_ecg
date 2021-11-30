@@ -1,20 +1,25 @@
 import os
 import sys
-import argparse
-from tqdm import tqdm
 import numpy as np
+from datetime import datetime
+from tqdm import tqdm
 
 import torch
 import torch.nn as nn
+import torch.optim as optim
 
 from config import args
 from data import get_data
 from model import get_model
 from utils.metrics import Evaluator
-from utils.utils import set_devices, logit2prob, scatterplot
+from utils.logger import Logger
+from utils.utils import set_seeds, set_devices
+from utils.loss import get_contrastive_loss
+from utils.lr_scheduler import LR_Scheduler
+from sklearn.metrics import roc_auc_score
 
 '''
-CUDA_VISIBLE_DEVICES={} python test.py --name {name} --model {cnn} --
+CUDA_VISIBLE_DEVICES=0 python test.py --name demo_epoch100_1 --viewtype demo --load-step 50
 '''
 # Get Dataloader, Model
 name = args.name
@@ -28,7 +33,7 @@ nlabels = 4
 classifier = nn.Linear(args.embed_size, nlabels).to(device)
 
 # Check if checkpoint exists
-ckpt_path = os.path.join(args.dir_result, name, 'ckpts/model.pth')
+ckpt_path = os.path.join(args.dir_result, name, 'ckpts/model_{}epc.pth'.format(str(args.load_step)))
 
 if not os.path.exists(ckpt_path):
     print("invalid checkpoint path : {}".format(ckpt_path))
@@ -43,7 +48,6 @@ print('loaded model')
 dw_criterion = nn.CrossEntropyLoss()
 dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=args.dw_lr)
 
-pbar = tqdm(total=args.dw_epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
 for epoch in range(1, args.dw_epochs + 1):
     loss = 0
     classifier.train()
@@ -61,12 +65,6 @@ for epoch in range(1, args.dw_epochs + 1):
         dw_optimizer.zero_grad()
         dw_loss.backward()
         dw_optimizer.step()
-        
-        if idx % args.log_iter == 0: 
-            tqdm_log = 'downstream_loss: {:.5f}'.format(loss/args.log_iter)
-            loss = 0
-            pbar.set_description(tqdm_log)
-    pbar.update(1)
 
 print("\n Finished training..........Starting Test")
 
