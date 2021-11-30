@@ -61,8 +61,8 @@ for epoch in range(1, args.epochs + 1):
             logger.log_tqdm(pbar)
             logger.log_scalars(epoch*len(train_loader)+idx)
             logger.loss_reset()
-    if epoch in [20, 50, 100, 200]:
-        logger.save(model, optimizer, epoch)
+#    if epoch in [20, 50, 100, 200]:
+#        logger.save(model, optimizer, epoch)
 
     ## LOGGING
 
@@ -100,7 +100,7 @@ for epoch in range(1, args.dw_epochs + 1):
         dw_loss = dw_criterion(dw_pred, train_y.to(torch.long).to(device))
         loss += dw_loss
         
-#         print(f"downstream_loss:{dw_loss}")
+        print(f"downstream_loss:{dw_loss}")
         
         dw_optimizer.zero_grad()
         dw_loss.backward()

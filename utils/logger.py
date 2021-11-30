@@ -62,10 +62,10 @@ class Logger:
         
     def save(self, model, optimizer, step, last=None, k_fold_num=0):
         if last:
-            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'last_step' : last}
+            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'last_step' : last, 'args': self.args_save}
             self.save_ckpt(ckpt, 'model.pth')
         else:
-            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict()}
+            ckpt = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'args': self.args_save}
             self.save_ckpt(ckpt, 'model_'+str(step)+'epc.pth')
             
         return ckpt
