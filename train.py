@@ -64,8 +64,6 @@ for epoch in range(1, args.epochs + 1):
     if epoch % args.save_iter == 0:
         logger.save(model, optimizer, epoch)
 
-    ## LOGGING
-    logger.save(model, optimizer, epoch)
     pbar.update(1)
 
 if args.epochs > 0:
@@ -99,7 +97,7 @@ for epoch in range(1, args.dw_epochs + 1):
         dw_loss = dw_criterion(dw_pred, train_y.to(torch.long).to(device))
         loss += dw_loss
         
-        print(f"downstream_loss:{dw_loss}")
+       # print(f"downstream_loss:{dw_loss}")
         
         dw_optimizer.zero_grad()
         dw_loss.backward()
