@@ -57,15 +57,14 @@ for epoch in range(1, args.epochs + 1):
         # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
         
-        if idx % args.log_iter == 0:        
+        if idx % args.log_iter == 0:
             logger.log_tqdm(pbar)
             logger.log_scalars(epoch*len(train_loader)+idx)
             logger.loss_reset()
-#    if epoch in [20, 50, 100, 200]:
-#        logger.save(model, optimizer, epoch)
+    if epoch % args.save_iter == 0:
+        logger.save(model, optimizer, epoch)
 
     ## LOGGING
-
     logger.save(model, optimizer, epoch)
     pbar.update(1)
 

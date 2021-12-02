@@ -60,6 +60,7 @@ parser.add_argument("--embed-size", type=int, default=128)
 # Loss Parameters
 parser.add_argument("--eps", type=float, default=1e-6)  # eps for RMSE
 parser.add_argument("--log-iter", type=int, default=10)
+parser.add_argument("--save-iter", type=int, default=50)
 
 # Testing Parameters
 parser.add_argument("--load-step", type=int, default=50)
