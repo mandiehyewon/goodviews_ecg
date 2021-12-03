@@ -31,7 +31,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name demo --viewtype demos
 
 Strategy 4
 ```
-
+CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name rhythm --viewtype rhythm
 ```
 
 Strategy 5
