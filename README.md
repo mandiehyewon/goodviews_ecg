@@ -13,6 +13,10 @@ Chapman electrocardiogram dataset is available in the following link: https://fi
 ## Training and Evaluation
 To train and evaluate the strategies in the paper, run this command:
 
+```
+CUDA_VISIBLE_DEVICES=0 python sup_train.py --epochs 100 --name base --embed-size 4 --viewtype sup --model cnn
+```
+
 Strategy 1 (CLOCS https://arxiv.org/pdf/2005.13249.pdf)
 ```
 CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name clocstime --viewtype clocstime

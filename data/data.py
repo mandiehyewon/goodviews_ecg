@@ -42,6 +42,15 @@ def get_data(args):
     df_tab.loc[df_tab["Rhythm"].isin(["SB"]), "y"] = 3
     df_tab.loc[df_tab["Rhythm"].isin(["SR", "SI", "SA"]), "y"] = 4
     df_tab["y"] = df_tab.copy()["y"] - 1
+    
+    train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
+    val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
+    test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
+
+    train_df = df_tab[df_tab["FileName"].isin(train_ids)]
+    val_df = df_tab[df_tab["FileName"].isin(val_ids)]
+    test_df = df_tab[df_tab["FileName"].isin(test_ids)]
+#     print(len(train_df), len(val_df), len(test_df))
 
     if args.viewtype == "demos":
         df_tab["group"] = pd.Categorical(
@@ -104,16 +113,7 @@ def get_data(args):
         df_tab["group"] = fit.labels_
         pass
 
-    train_ids = np.load("./stores/train_ids.npy", allow_pickle=True)
-    val_ids = np.load("./stores/val_ids.npy", allow_pickle=True)
-    test_ids = np.load("./stores/test_ids.npy", allow_pickle=True)
-
-    train_df = df_tab[df_tab["FileName"].isin(train_ids)]
-    val_df = df_tab[df_tab["FileName"].isin(val_ids)]
-    test_df = df_tab[df_tab["FileName"].isin(test_ids)]
-#     print(len(train_df), len(val_df), len(test_df))s
-
-    if args.viewtype == "simclr":
+    elif args.viewtype == "simclr":
         # batch-wise append
         train_df.index = range(len(train_df.index))  # re=index
         train_df = pd.concat(
@@ -176,7 +176,7 @@ def get_data(args):
             num_workers=0,
         )
 
-    else:
+    else: # "sup"
         train_loader = DataLoader(
             ECGDataset(args, train_df),
             batch_size=args.batch_size,
@@ -199,7 +199,6 @@ def get_data(args):
         )
 
     return train_loader, val_loader, test_loader
-
 
 def save_trainid(args):
     print(args.dir_csv)

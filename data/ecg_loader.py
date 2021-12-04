@@ -10,7 +10,6 @@ from torch.utils.data import Dataset
 class ECGDataset(Dataset):
     def __init__(self, args, df):  # , augment=False):
         self.args = args
-        self.label = self.args.label
         self.dir_csv = self.args.dir_csv
         self.df = df
         self.viewtype = self.args.viewtype
@@ -29,6 +28,13 @@ class ECGDataset(Dataset):
             x = normalize_frame(x)
 
         y = row["y"]
+        
+        if self.viewtype == 'sup':
+#             label = np.zeros(4)
+#             label[int(y)] = 1
+#             y = label
+            
+            return x.T, y, fname
 
         if self.viewtype in ['demos', 'attr']:
             group = row["group"]
@@ -59,7 +65,6 @@ def normalize_frame(frame):
 class CLOCSDataset(Dataset):
     def __init__(self, args, df):  # , augment=False):
         self.args = args
-        self.label = self.args.label
         self.dir_csv = self.args.dir_csv
         self.df = df
         self.viewtype = self.args.viewtype

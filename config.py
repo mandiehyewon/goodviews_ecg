@@ -35,7 +35,6 @@ parser.add_argument("--temperature", type=float, default=0.07)
 # Data Parameters
 parser.add_argument('--data', type=str, default="whole")
 parser.add_argument("--normalize", default=False, action="store_true")
-parser.add_argument("--label", type=str, default="age", choices=["age", "gender", "s1", "s2", "s5"])
 
 # Augmentation Parameters
 parser.add_argument('--no-preaug', action="store_false", help='do not use priorly augmented data')
@@ -49,7 +48,7 @@ parser.add_argument('--mask-max', type=int, default=150)
 
 # Model Parameters
 parser.add_argument("--model", type=str, default="contrastive")  # model name
-parser.add_argument("--viewtype", type=str, default="simclr", choices=["demos", "rhythm", "clocstime", "clocslead", "simclr", "attr"])
+parser.add_argument("--viewtype", type=str, default="simclr", choices=["demos", "rhythm", "clocstime", "clocslead", "simclr", "attr", "sup"])
 parser.add_argument("--num-kmeans-clusters", type=int, default=40)
 
 # Architecture Parameters
