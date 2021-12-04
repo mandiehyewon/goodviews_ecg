@@ -41,10 +41,9 @@ for epoch in range(1, args.epochs + 1):
         train_x= train_x.to(device)
         logit = model(train_x)
 
-#         import ipdb; ipdb.set_trace()
         loss = criterion(logit, train_y.long().to(device)).mean()
         
-#         print(loss)
+        print(loss)
         logger.loss += loss.item()
 
         optimizer.zero_grad()
@@ -52,29 +51,29 @@ for epoch in range(1, args.epochs + 1):
         # torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
         optimizer.step()
         
-        if idx % args.log_iter == 0:
-            logger.log_tqdm(pbar)
-            logger.log_scalars(epoch*len(train_loader)+idx)
-            logger.loss_reset()
+#         if idx % args.log_iter == 0:
+#             logger.log_tqdm(pbar)
+#             logger.log_scalars(epoch*len(train_loader)+idx)
+#             logger.loss_reset()
 
     ### VALIDATION
-    if epoch % args.val_iter == 0:
-        model.eval()
-        logger.evaluator.reset()
-        with torch.no_grad():
-            for batch in val_loader:
-                val_x, val_y = batch
-                val_x, val_y = val_x.to(device), val_y.long().to(device)
+    model.eval()
+    logger.evaluator.reset()
+    with torch.no_grad():
+        for batch in val_loader:
+            val_x, val_y, _= batch
+            val_x, val_y = val_x.to(device), val_y.long().to(device)
 
-                logits = model(val_x)
+            logits = model(val_x)
 
-                loss = criterion(logits, val_y.float()).mean()
-                logger.evaluator.add_batch(val_y.cpu(), logits.cpu(), loss)
-            logger.add_validation_logs(epoch, loss)
-        model.train()
-    if epoch % args.save_iter == 0:
-        logger.save(model, optimizer, epoch)
-    pbar.update(1)
+            loss = criterion(logits, val_y.long()).mean()
+            print (loss)
+#             logger.evaluator.add_batch(val_y.cpu(), logits.cpu(), loss)
+#         logger.add_validation_logs(epoch, loss)
+    model.train()
+#     if epoch % args.save_iter == 0:
+#         logger.save(model, optimizer, epoch)
+#     pbar.update(1)
 
 if args.epochs > 0:
     ckpt = logger.save(model, optimizer, epoch, last=True)
