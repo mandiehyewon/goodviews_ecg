@@ -1,4 +1,4 @@
-# Finding "Good Views" of Electrocardiogram Signals for inferring abnormalities in cardiac condition
+# Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition
 
 ## Concept Figure
 ![concpet](./assets/concept.png)
