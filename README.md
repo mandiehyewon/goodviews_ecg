@@ -4,10 +4,15 @@
 ![concpet](./assets/concept.png)
 
 ## Environment Setting
-Our code requires
+Our code dependencies on `python` and `pytorch`
 ```
 python == 3.9.7
 pytorch == 1.10.0
+```
+
+Or, simply run
+```
+pip install -r requirements.txt
 ```
 
 ## Dataset
