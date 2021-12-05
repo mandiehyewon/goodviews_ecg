@@ -1,8 +1,7 @@
 # Finding "Good Views" of Electrocardiogram Signals for inferring abnormalities in cardiac condition
 
-<p align="center">
-  <img src="/assets/concept.png" width="418" height="418">
-</p>
+## Concept Figure
+![concpet](./assets/concept.png)
 
 ## Environment Setting
 Our code requires
