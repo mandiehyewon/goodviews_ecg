@@ -3,6 +3,16 @@
 ## Paper
 This repo contains a code implementation of the [final project document](assets/Finding%20_Good%20Views_%20of%20Electrocardiogram%20Signals%20for%20Inferring%20Abnormalities%20in%20Cardiac%20Condition.pdf) of [6.867 Machine Learning](http://www.ai.mit.edu/courses/6.867-f04/). 
 
+If you use our code or refer to our result in your research, please cite:
+```
+@inproceedings{goodviewecg2021,
+  author = {Jeong, Hyewon and Yun,Suyeol and Adam Hammaad},
+  title = {Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition},
+  booktitle = {Preprint},
+  year = {2021}
+}
+```
+
 ## Concept Figure
 ![concpet](./assets/concept.png)
 
@@ -23,7 +33,7 @@ Chapman electrocardiogram dataset is available at [here](https://figshare.com/co
 
 1. Download `ECGDataDenoised.zip` and unzip it. Place the unzipped `ECGDataDenoised` inside the `dir_csv` defined in `path_configs.yaml`.
 
-2. Download `Diagnostics.xlsx` and place it inside the `dir_csv` defined in `path_configs.yaml`.
+2. Download `Diagnostics.xlsx` and place it inside the `dir_csv` defined in `path_configs.yaml`. To remove NaN signals and use the same setting we used, [this file](https://docs.google.com/spreadsheets/d/1rW9f6FYswwbSRcf8A5YPSubb5cIYKxRs/edit?usp=sharing&ouid=109860069282059750704&rtpof=true&sd=true) instead.
 
 
 ## Training and Evaluation
