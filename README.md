@@ -1,7 +1,7 @@
 # Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition
 
 ## Paper
-This repo contains a code implementation of the [final project document](assets/Finding%20_Good%20Views_%20of%20Electrocardiogram%20Signals%20for%20Inferring%20Abnormalities%20in%20Cardiac%20Condition.pdf) of [6.867 Machine Learning](http://www.ai.mit.edu/courses/6.867-f04/). 
+This repo contains a code implementation of the [final project document](assets/Finding%20_Good%20Views_%20of%20Electrocardiogram%20Signals%20for%20Inferring%20Abnormalities%20in%20Cardiac%20Condition.pdf) of [6.867 Machine Learning](http://www.ai.mit.edu/courses/6.867-f04/) at MIT. 
 
 If you use our code or refer to our result in your research, please cite:
 ```
@@ -74,7 +74,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name demo --viewtype demos
 CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name rhythm --viewtype rhythm
 ```
 
-### Strategy 5 (Matching on Attributes)
+### Strategy 5 (Matching on Wave Attributes)
 ```
 CUDA_VISIBLE_DEVICES=0 python train.py --epochs 100 --name attr --viewtype attr
 ```
