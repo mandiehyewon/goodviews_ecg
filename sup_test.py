@@ -42,45 +42,6 @@ model.load_state_dict(state)
 model.eval()
 print('loaded model')
 
-dw_criterion = nn.CrossEntropyLoss()
-dw_optimizer = torch.optim.SGD(classifier.parameters(), lr=args.dw_lr)
-
-pbar = tqdm(total=args.dw_epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
-for epoch in range(1, args.dw_epochs + 1):
-    loss = 0
-    classifier.train()
-    
-    for (idx, train_batch) in enumerate(train_loader):
-        if args.viewtype in ['clocstime', 'clocslead']:
-            train_x1, train_x2, train_y, train_group, train_fnames = train_batch
-
-            train_x = torch.cat((train_x1, train_x2),dim=0)
-            train_y = torch.cat((train_y, train_y),dim=0)
-            train_group = torch.cat((train_group, train_group),dim=0)
-
-        else:
-            train_x, train_y, train_group, train_fnames = train_batch
-        
-        train_x = train_x.to(device)
-
-        dw_pred = classifier(model(train_x))
-        dw_loss = dw_criterion(dw_pred, train_y.to(torch.long).to(device))
-        loss += dw_loss
-        
-        print(f"downstream_loss:{dw_loss}")
-        
-        dw_optimizer.zero_grad()
-        dw_loss.backward()
-        dw_optimizer.step()
-        
-        if idx % args.log_iter == 0: 
-            tqdm_log = 'downstream_loss: {:.5f}'.format(dw_loss/args.log_iter)
-            loss = 0
-            pbar.set_description(tqdm_log)
-    pbar.update(1)
-
-print("\n Finished training..........Starting Test")
-
 with torch.no_grad():
     model.eval()
     classifier.eval()
