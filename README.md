@@ -5,8 +5,8 @@ This repo contains a code implementation of the [final project document](assets/
 
 If you use our code or refer to our result in your research, please cite:
 ```
-@inproceedings{goodviewecg2021,
-  author = {Jeong, Hyewon and Yun,Suyeol and Adam Hammaad},
+@inproceedings{jeonggoodview2021,
+  author = {Jeong, Hyewon and Yun,Suyeol and Adam, Hammaad},
   title = {Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition},
   booktitle = {Preprint},
   year = {2021}
@@ -37,10 +37,16 @@ Chapman electrocardiogram dataset is available at [here](https://figshare.com/co
 
 
 ## Training and Evaluation
-To train and evaluate the strategies in the paper, run this command:
 
+### Supervised Baseline
+
+To train and evaluate the strategies in the paper, run this command:
 ```
 CUDA_VISIBLE_DEVICES=0 python sup_train.py --epochs 100 --name base --embed-size 4 --viewtype sup --model cnn
+```
+For evaluation on test set:
+```
+CUDA_VISIBLE_DEVICES=0 python sup_test.py --name base --viewtype sup --load-step 50 --embed-size 4
 ```
 
 ### Strategy 1 ([CLOCS](https://arxiv.org/pdf/2005.13249.pdf))
