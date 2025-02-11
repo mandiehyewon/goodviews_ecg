@@ -1,7 +1,7 @@
 # Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition
 
 ## Paper
-This repo contains a code implementation of the [final project document](assets/Finding%20_Good%20Views_%20of%20Electrocardiogram%20Signals%20for%20Inferring%20Abnormalities%20in%20Cardiac%20Condition.pdf) of [6.867 Machine Learning](http://www.ai.mit.edu/courses/6.867-f04/) at MIT. 
+This repo contains a code implementation of the [final project document](assets/Finding%20_Good%20Views_%20of%20Electrocardiogram%20Signals%20for%20Inferring%20Abnormalities%20in%20Cardiac%20Condition.pdf) of [6.867 Machine Learning](http://www.ai.mit.edu/courses/6.867-f04/) at MIT. We have published the copy of the report to arxiv: [link to paper](https://arxiv.org/pdf/2411.17702).
 
 - If you use our code or refer to our result in your research, please cite:
 ```
