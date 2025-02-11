@@ -5,11 +5,11 @@ This repo contains a code implementation of the [final project document](assets/
 
 - If you use our code or refer to our result in your research, please cite:
 ```
-@inproceedings{jeonggoodview2021,
-  author = {Jeong, Hyewon and Yun, Suyeol and Adam, Hammaad},
-  title = {Finding "Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition},
-  booktitle = {Preprint},
-  year = {2021}
+@article{jeong2024finding,
+  title={Finding" Good Views" of Electrocardiogram Signals for Inferring Abnormalities in Cardiac Condition},
+  author={Jeong, Hyewon and Yun, Suyeol and Adam, Hammaad},
+  journal={arXiv preprint arXiv:2411.17702},
+  year={2024}
 }
 ```
 
